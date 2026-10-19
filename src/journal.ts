@@ -1,4 +1,13 @@
-import { chmodSync, existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, unlinkSync, writeFileSync } from 'node:fs';
+import {
+  chmodSync,
+  existsSync,
+  lstatSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  unlinkSync,
+  writeFileSync,
+} from 'node:fs';
 import { dirname, join } from 'node:path';
 import { Policy } from './policy.js';
 import { hash } from './tools.js';
@@ -6,63 +15,148 @@ import type { Change, FaultHook, Tree } from './types.js';
 
 export function snapshot(policy: Policy): Tree {
   const tree: Tree = Object.create(null) as Tree;
-  let total = 0, count = 0;
+  let totalBytes = 0;
+  let fileCount = 0;
+
   function visit(directory: string, prefix: string): void {
     for (const name of readdirSync(directory).sort()) {
-      const path = join(directory, name), relative = prefix ? `${prefix}/${name}` : name;
-      const st = lstatSync(path);
-      if (st.isSymbolicLink()) throw new Error(`Snapshot rejects symlink: ${relative}`);
-      if (st.isDirectory()) { visit(path, relative); continue; }
-      if (!st.isFile() || st.nlink > 1) throw new Error(`Snapshot rejects special/hardlinked file: ${relative}`);
-      if (++count > 10000 || st.size > policy.config.maxFileBytes || total + st.size > policy.config.maxTreeBytes) throw new Error('Workspace snapshot exceeds configured limits');
+      const path = join(directory, name);
+      const relative = prefix ? `${prefix}/${name}` : name;
+      const stats = lstatSync(path);
+
+      if (stats.isSymbolicLink()) {
+        throw new Error(`Snapshot rejects symlink: ${relative}`);
+      }
+
+      if (stats.isDirectory()) {
+        visit(path, relative);
+        continue;
+      }
+
+      if (!stats.isFile() || stats.nlink > 1) {
+        throw new Error(`Snapshot rejects special/hardlinked file: ${relative}`);
+      }
+
+      if (
+        ++fileCount > 10000 ||
+        stats.size > policy.config.maxFileBytes ||
+        totalBytes + stats.size > policy.config.maxTreeBytes
+      ) {
+        throw new Error('Workspace snapshot exceeds configured limits');
+      }
+
       const content = readFileSync(path);
-      total += content.length;
-      tree[relative] = { content: content.toString('base64'), hash: hash(content), mode: st.mode & 0o777 };
+
+      totalBytes += content.length;
+      tree[relative] = {
+        content: content.toString('base64'),
+        hash: hash(content),
+        mode: stats.mode & 0o777,
+      };
     }
   }
   visit(policy.workspace, '');
+
   return tree;
 }
+
 export function treeDiff(before: Tree, after: Tree): Change[] {
-  return [...new Set([...Object.keys(before), ...Object.keys(after)])].sort().filter(p => before[p]?.hash !== after[p]?.hash || before[p]?.mode !== after[p]?.mode)
-    .map(path => ({ path, before: before[path] ?? null, after: after[path] ?? null }));
+  return [...new Set([...Object.keys(before), ...Object.keys(after)])]
+    .sort()
+    .filter(
+      (path) =>
+        before[path]?.hash !== after[path]?.hash || before[path]?.mode !== after[path]?.mode,
+    )
+    .map((path) => ({ path, before: before[path] ?? null, after: after[path] ?? null }));
 }
+
 export function assertTree(expected: Tree, actual: Tree): void {
   const changes = treeDiff(expected, actual);
-  if (changes.length) throw new Error(`External workspace conflict: ${changes.map(c => c.path).join(', ')}`);
-}
-export function displayDiff(before: Tree, after: Tree): string {
-  return treeDiff(before, after).map(c => {
-    const lines = [`diff --agent a/${c.path} b/${c.path}`, `--- ${c.before ? `a/${c.path}` : '/dev/null'}`, `+++ ${c.after ? `b/${c.path}` : '/dev/null'}`];
-    const a = c.before ? Buffer.from(c.before.content, 'base64') : Buffer.alloc(0);
-    const b = c.after ? Buffer.from(c.after.content, 'base64') : Buffer.alloc(0);
-    if (a.includes(0) || b.includes(0)) lines.push('Binary contents differ');
-    else {
-      const old = a.toString('utf8').split('\n'), next = b.toString('utf8').split('\n');
-      lines.push(`@@ -1,${old.length} +1,${next.length} @@`, ...old.map(l => `-${l}`), ...next.map(l => `+${l}`));
-    }
-    return lines.join('\n');
-  }).join('\n');
-}
-export function rollbackPreflight(policy: Policy, initial: Tree, expected: Tree, current: Tree): Change[] {
-  const changes = treeDiff(initial, expected);
-  for (const c of changes) {
-    policy.path(c.path, true);
-    if (current[c.path]?.hash !== c.after?.hash || current[c.path]?.mode !== c.after?.mode) throw new Error(`Rollback conflict: ${c.path}; no files restored`);
-    if (c.before && hash(Buffer.from(c.before.content, 'base64')) !== c.before.hash) throw new Error('Corrupt rollback snapshot');
+
+  if (changes.length) {
+    throw new Error(
+      `External workspace conflict: ${changes.map((change) => change.path).join(', ')}`,
+    );
   }
+}
+
+export function displayDiff(before: Tree, after: Tree): string {
+  return treeDiff(before, after)
+    .map((change) => {
+      const lines = [
+        `diff --agent a/${change.path} b/${change.path}`,
+        `--- ${change.before ? `a/${change.path}` : '/dev/null'}`,
+        `+++ ${change.after ? `b/${change.path}` : '/dev/null'}`,
+      ];
+      const beforeBytes = change.before
+        ? Buffer.from(change.before.content, 'base64')
+        : Buffer.alloc(0);
+      const afterBytes = change.after
+        ? Buffer.from(change.after.content, 'base64')
+        : Buffer.alloc(0);
+
+      if (beforeBytes.includes(0) || afterBytes.includes(0)) {
+        lines.push('Binary contents differ');
+      } else {
+        const beforeLines = beforeBytes.toString('utf8').split('\n');
+        const afterLines = afterBytes.toString('utf8').split('\n');
+
+        lines.push(
+          `@@ -1,${beforeLines.length} +1,${afterLines.length} @@`,
+          ...beforeLines.map((line) => `-${line}`),
+          ...afterLines.map((line) => `+${line}`),
+        );
+      }
+
+      return lines.join('\n');
+    })
+    .join('\n');
+}
+
+export function rollbackPreflight(
+  policy: Policy,
+  initial: Tree,
+  expected: Tree,
+  current: Tree,
+): Change[] {
+  const changes = treeDiff(initial, expected);
+
+  for (const change of changes) {
+    policy.path(change.path, true);
+    if (
+      current[change.path]?.hash !== change.after?.hash ||
+      current[change.path]?.mode !== change.after?.mode
+    ) {
+      throw new Error(`Rollback conflict: ${change.path}; no files restored`);
+    }
+
+    if (
+      change.before &&
+      hash(Buffer.from(change.before.content, 'base64')) !== change.before.hash
+    ) {
+      throw new Error('Corrupt rollback snapshot');
+    }
+  }
+
   return changes;
 }
+
 export function restoreFiles(policy: Policy, changes: Change[], faults?: FaultHook): void {
-  for (const c of changes) {
-    const path = policy.path(c.path, true);
-    if (c.before) {
+  for (const change of changes) {
+    const path = policy.path(change.path, true);
+
+    if (change.before) {
       mkdirSync(dirname(path), { recursive: true });
       // Parent checks run again after directory creation.
-      policy.path(c.path, true);
-      writeFileSync(path, Buffer.from(c.before.content, 'base64'), { mode: c.before.mode });
-      chmodSync(path, c.before.mode);
-    } else if (existsSync(path)) unlinkSync(path);
+      policy.path(change.path, true);
+      writeFileSync(path, Buffer.from(change.before.content, 'base64'), {
+        mode: change.before.mode,
+      });
+      chmodSync(path, change.before.mode);
+    } else if (existsSync(path)) {
+      unlinkSync(path);
+    }
+
     faults?.('after_rollback_write');
   }
 }
