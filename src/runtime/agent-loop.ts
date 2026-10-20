@@ -6,7 +6,7 @@ import type { RunState } from '../types.js';
 import { stopRun } from './context.js';
 import { admitToolBatch } from './tool-batch.js';
 import { processPendingCall } from './call-execution.js';
-import { printTaskChecklist } from './task-state.js';
+import { printTaskChecklist, renderPhaseMessage } from './task-state.js';
 
 export async function runAgent(context: RuntimeContext, id: string): Promise<RunState> {
   const initial = context.store.get(id);
@@ -64,6 +64,17 @@ export async function runAgent(context: RuntimeContext, id: string): Promise<Run
       if (run.spent.modelRequests >= run.limits.modelRequests) {
         stopRun(context, run, 'blocked', 'Budget exhausted: modelRequests');
         break;
+      }
+
+      if (run.phase === 'execute') {
+        // Some model templates omit transport IDs. Expose saved evidence in text
+        // after the entire tool batch, so tool-response ordering stays valid.
+        const content = renderPhaseMessage(run);
+        const previous = run.messages.at(-1);
+
+        if (previous?.role !== 'user' || previous.content !== content) {
+          run.messages.push({ role: 'user', content });
+        }
       }
 
       run.spent.modelRequests++;

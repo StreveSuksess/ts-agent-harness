@@ -1,5 +1,6 @@
 import type { RuntimeContext } from './context.js';
 import type { RunState } from '../types.js';
+import { PROJECT_TOOLS } from '../types.js';
 
 export function selectNextTask(run: RunState): void {
   const ready = run.tasks.find(
@@ -24,9 +25,30 @@ export function renderPhaseMessage(run: RunState): string {
 
   const task = run.tasks.find((task) => task.id === run.activeTaskId);
 
-  return task
-    ? `Phase: EXECUTE. Current task: ${JSON.stringify(task)}. Use complete_task with saved evidence_call_id after satisfying verification.`
-    : 'All tasks verified. Return your final textual answer.';
+  if (!task) {
+    return 'All tasks verified. Return your final textual answer.';
+  }
+
+  const evidence = Object.values(run.calls)
+    .filter(
+      (record) =>
+        record.phase === 'execute' &&
+        record.taskId === task.id &&
+        record.status === 'completed' &&
+        record.result?.ok &&
+        PROJECT_TOOLS.has(record.call.function.name),
+    )
+    .slice(-8)
+    .map((record) => ({
+      evidence_call_id: record.call.id,
+      tool: record.call.function.name,
+    }));
+
+  return [
+    `Phase: EXECUTE. Current task: ${JSON.stringify(task)}.`,
+    `Recent successful project calls for this task: ${JSON.stringify(evidence)}.`,
+    'Use complete_task with a listed evidence_call_id after satisfying verification.',
+  ].join(' ');
 }
 
 export function printTaskChecklist(context: RuntimeContext, run: RunState): void {
