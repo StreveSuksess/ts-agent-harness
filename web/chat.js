@@ -1,322 +1,245 @@
-import {
-  el,
-  text,
-  button,
-  details,
-  group,
-  row,
-  chip,
-  short,
-  number,
-  pretty,
-  when,
-  empty,
-  statusNames,
-  sectionTitle,
-} from './dom.js';
+import { button, el, short, statusNames, text } from './dom.js';
+import { approval } from './approval.js';
+import { icon } from './icons.js';
 
-function review(run, ctx) {
-  const isPlan = run.status === 'awaiting_plan';
-  if (!isPlan && run.status !== 'awaiting_action') return null;
-  const pending = run.pending?.call ?? run.pending;
-  const notes = el('input', {
-    type: 'text',
-    maxlength: 1000,
-    placeholder: 'Что изменить в плане?',
-    'aria-label': 'Комментарий к отклонению плана',
+export { inspection } from './inspection.js';
+
+function markedText(value) {
+  return value.split(/(`[^`\n]+`|\*\*[^*\n]+\*\*)/u).map((part) => {
+    if (part.startsWith('`') && part.endsWith('`')) return text('code', part.slice(1, -1));
+    if (part.startsWith('**') && part.endsWith('**')) return text('strong', part.slice(2, -2));
+    return part;
   });
-  const decide = (decision) =>
-    ctx.action('decision', {
-      runId: run.id,
-      sessionId: ctx.sessionId,
-      revision: run.revision,
-      decision,
-      ...(isPlan && notes.value ? { feedback: notes.value } : {}),
-    });
-  const plan = run.plan ?? {};
-  const args = pending?.function?.arguments;
-  let callArgs;
-  try {
-    callArgs = JSON.parse(args);
-  } catch {
-    callArgs = args;
+}
+
+// Responses are untrusted. Render common Markdown constructs using text nodes only.
+function answerBody(value) {
+  const blocks = [];
+  let code = null;
+  for (const line of value.split(/\r?\n/u)) {
+    if (/^\s*```/u.test(line)) {
+      if (code === null) code = [];
+      else {
+        blocks.push(text('pre', code.join('\n'), 'answer-code'));
+        code = null;
+      }
+    } else if (code !== null) code.push(line);
+    else if (!line.trim()) blocks.push(el('div', { class: 'paragraph-gap' }));
+    else if (/^#{1,6}\s/u.test(line))
+      blocks.push(el('h3', {}, markedText(line.replace(/^#{1,6}\s+/u, ''))));
+    else if (/^[-*]\s/u.test(line))
+      blocks.push(el('div', { class: 'answer-bullet' }, markedText(line.slice(2))));
+    else blocks.push(el('div', {}, markedText(line)));
   }
-  const body = isPlan
-    ? [
-        text('h3', plan.goal ?? 'Проверка плана'),
-        el(
-          'ol',
-          { class: 'plan-steps' },
-          (plan.steps ?? []).map((step) =>
-            el(
-              'li',
-              {},
-              text('strong', step.description),
-              text('small', (step.tools ?? []).join(' · ')),
-              details(
-                'Критерий и зависимости',
-                { id: step.id, verification: step.verification, depends_on: step.depends_on },
-                step.id,
-              ),
-            ),
-          ),
-        ),
-        text('p', plan.done_when, 'muted'),
-        details(
-          'Риски и допущения',
-          { risks: plan.risks, assumptions: plan.assumptions },
-          run.id + '-risks',
-        ),
-        notes,
-      ]
-    : [
-        text('h3', pending?.function?.name ?? 'Запрошенная операция'),
-        text('small', 'Рабочая папка · ' + (run.workspace ?? '').split(/[\\/]/u).at(-1)),
-        el('pre', {}, pretty(callArgs) ?? '—'),
-      ];
-  return el(
-    'section',
-    { class: 'review' },
-    text('div', isPlan ? 'СОГЛАСОВАНИЕ ПЛАНА' : 'РАЗРЕШЕНИЕ НА ДЕЙСТВИЕ', 'eyebrow'),
-    body,
-    el(
-      'div',
-      { class: 'buttons' },
-      button(isPlan ? 'Принять план' : 'Разрешить', () => decide('allow'), 'primary'),
-      button('Отклонить', () => decide('deny')),
-    ),
-  );
+  if (code !== null) blocks.push(text('pre', code.join('\n'), 'answer-code'));
+  return el('div', { class: 'reply' }, blocks);
 }
-export function transcript(session, ctx) {
-  if (!session?.runs?.length)
-    return el(
-      'div',
-      { class: 'welcome' },
-      el('div', { class: 'terminal-mark', 'aria-hidden': 'true' }, '›_'),
-      text('h2', 'Новый диалог'),
-      text('p', 'Поставьте задачу агенту. Здесь появятся его план и результат.'),
-      el(
-        'div',
-        { class: 'suggestions' },
-        ...[
-          'Сохрани список открытых задач из трекера.',
-          'Составь сводку задач по исполнителям.',
-        ].map((s) => button(s + ' ↗', () => ctx.draft(s), 'suggest')),
-      ),
-    );
-  return session.runs.map((run) =>
-    el(
-      'article',
-      { class: 'turn' },
-      el('div', { class: 'byline' }, text('b', 'Вы'), text('code', short(run.id))),
-      text('div', run.prompt, 'bubble'),
-      el(
-        'div',
-        { class: 'byline' },
-        text('b', 'Агент'),
-        chip(statusNames[run.status] ?? run.status, run.status === 'completed' ? 'success' : ''),
-      ),
-      run.final ? text('div', run.final, 'reply') : null,
-      run.reason && !['awaiting_action', 'awaiting_plan'].includes(run.status)
-        ? text('p', run.reason, 'reason')
-        : null,
-      run.status === 'running'
-        ? empty('Выполняется запрос. Ход работы виден в журнале событий.')
-        : null,
-      ['blocked', 'conflict'].includes(run.status)
-        ? button('Продолжить запуск', () => ctx.action('resume', { runId: run.id }))
-        : null,
-      review(run, ctx),
-      run.tasks?.length
-        ? el(
-            'details',
-            { 'data-detail': run.id + '-tasks' },
-            el('summary', {}, 'Задачи · ' + run.tasks.length),
-            el(
-              'ul',
-              {},
-              run.tasks.map((t) =>
-                text(
-                  'li',
-                  (t.status === 'completed' ? '✓ ' : t.status === 'running' ? '→ ' : '• ') +
-                    t.description,
-                ),
-              ),
-            ),
-          )
-        : null,
-    ),
-  );
-}
-function counts(title, map) {
-  return el(
-    'div',
-    {},
-    sectionTitle(title, Object.keys(map ?? {}).length),
-    Object.entries(map ?? {}).map(([key, count]) => row(key, '', text('b', count))),
-  );
-}
-function metrics(stats) {
-  const usage = stats?.usage ?? {};
-  return el(
-    'div',
-    {},
-    sectionTitle('Токены'),
-    el(
-      'div',
-      { class: 'metric-grid' },
-      ...[
-        ['Вход', usage.input],
-        ['Выход', usage.output],
-        ['Запросы', stats?.modelRequests],
-      ].map(([label, val]) =>
-        el('div', { class: 'metric' }, text('small', label), text('b', number(val))),
-      ),
-    ),
-    usage.complete ? null : empty('Usage предоставлен не полностью.'),
-    ...Object.entries(stats?.byModel ?? {}).map(([engine, u]) =>
-      row(
-        engine,
-        'вход ' +
-          number(u.input) +
-          ' · выход ' +
-          number(u.output) +
-          (u.complete ? '' : ' · неполные данные'),
-      ),
-    ),
-    counts('Инструменты', stats?.tools),
-    counts('Скиллы', stats?.skills),
-    counts('MCP', stats?.mcp),
-  );
-}
-const eventLabels = {
-  laya_route: 'Выбор Laya',
-  skill_loaded: 'Загрузка скилла',
-  catalog: 'Каталог расширений',
-  catalog_error: 'Ошибка каталога',
-  assistant_text: 'Ответ агента',
-  user_request: 'Сообщение',
-  model_error: 'Ошибка модели',
-  status: 'Статус запуска',
-  tool_call: 'Запрос инструмента',
-  tool_result: 'Ответ инструмента',
-  model_request: 'Запрос модели',
-  model_response: 'Ответ модели',
-  usage: 'Расход модели',
-  error: 'Ошибка',
-  decision: 'Решение оператора',
+
+const tools = {
+  write_file: 'Запись файла',
+  read_file: 'Чтение файла',
+  list_files: 'Список файлов',
+  delete_file: 'Удаление файла',
+  Bash: 'Команда Bash',
+  load_skill: 'Загрузка скилла',
+  complete_task: 'Проверка результата',
+  submit_plan: 'План работы',
+  market_install: 'Установка скилла',
+  market_search: 'Поиск в маркете',
 };
-function timeline(runs, ctx) {
-  const events = runs.flatMap((r) => r.events ?? []);
-  if (!events.length) return empty('Пока нет событий.');
-  const relevant = events.filter((e) => {
-    const d = e.data ?? {};
-    if (ctx.eventFilter === 'extensions')
-      return (
-        ['laya_route', 'catalog', 'catalog_error', 'skill_loaded'].includes(e.type) ||
-        Boolean(d.server) ||
-        /^(mcp_|load_skill$|market_)/u.test(d.tool ?? '')
-      );
-    if (ctx.eventFilter === 'errors')
-      return e.type.includes('error') || d.result?.ok === false || d.choice === 'reject';
-    return true;
-  });
-  const filter = el(
-    'select',
-    { 'aria-label': 'Показать события' },
-    [
-      ['all', 'Все события'],
-      ['extensions', 'Laya, скиллы и MCP'],
-      ['errors', 'Ошибки и отказы'],
-    ].map(([v, label]) => el('option', { value: v }, label)),
+
+function activityTitle(event) {
+  const d = event.data;
+  if (event.type === 'tool_call')
+    return [tools[d.tool] ?? d.tool, d.args?.path ?? d.args?.name ?? d.args?.command];
+  if (event.type === 'laya_route')
+    return [
+      'Выбор Laya',
+      [d.skill ?? d.marketSkill, d.mcp].filter(Boolean).join(' · ') || 'Без скилла и MCP',
+    ];
+  if (event.type === 'decision')
+    return ['Решение пользователя', d.choice === 'reject' ? 'Отклонено' : 'Разрешено'];
+  return ['Ошибка', d.error ?? d.result?.error];
+}
+
+function journal(run, ctx) {
+  const entries = (run.events ?? []).filter(
+    (e) =>
+      ['tool_call', 'decision', 'laya_route', 'model_error', 'catalog_error'].includes(e.type) ||
+      (e.type === 'tool_result' && e.data.result?.ok === false),
   );
-  filter.value = ctx.eventFilter;
-  filter.onchange = () => ctx.filterEvents(filter.value);
+  if (!entries.length) return null;
+  const start = Date.parse(run.createdAt),
+    end = Date.parse(run.events.at(-1).time);
+  const elapsed = run.final && end >= start ? Math.round((end - start) / 1000) : null;
   return el(
-    'div',
-    { class: 'timeline' },
-    sectionTitle('Журнал событий', relevant.length),
-    filter,
-    !relevant.length ? empty('Таких событий пока нет.') : null,
-    relevant
-      .slice()
-      .reverse()
-      .map((event) => {
-        const d = event.data ?? {};
-        const target =
-          event.type === 'laya_route'
-            ? [
-                d.model,
-                d.skill && 'скилл ' + d.skill,
-                d.marketSkill && 'маркет ' + d.marketSkill,
-                d.mcp && 'MCP ' + d.mcp,
-              ]
-                .filter(Boolean)
-                .join(' · ')
-            : (d.name ?? d.tool ?? d.server ?? d.engine ?? d.model ?? d.status ?? '');
+    'details',
+    { class: 'turn-activity', 'data-detail': run.id + '-activity' },
+    el(
+      'summary',
+      {},
+      icon('activity'),
+      text('span', 'Ход работы'),
+      elapsed === null ? null : text('span', elapsed + ' с', 'activity-time'),
+      icon('chevron-right'),
+    ),
+    el(
+      'ol',
+      { class: 'trace-steps' },
+      entries.map((e) => {
+        const [label, meta] = activityTitle(e);
+        const body = [el('span', {}, text('span', label), meta ? text('small', meta) : null)];
         return el(
-          'details',
-          { 'data-detail': event.id, class: 'event' },
-          el(
-            'summary',
-            {},
-            el(
-              'span',
-              { class: 'event-line' },
-              text('b', eventLabels[event.type] ?? event.type),
-              text('time', when(event.time)),
-            ),
-            text('small', typeof target === 'string' ? target : event.type),
-          ),
-          text('code', event.id),
-          text('pre', pretty(d)),
+          'li',
+          {},
+          ctx.openEvent
+            ? el(
+                'button',
+                {
+                  type: 'button',
+                  title: 'Открыть событие в инспекторе',
+                  'on:click': () => ctx.openEvent(e.id),
+                },
+                ...body,
+                icon('arrow-up-right'),
+              )
+            : el('span', {}, ...body),
         );
       }),
+    ),
   );
 }
-export function inspection(session, tab, ctx) {
-  if (!session) return empty('Отправьте запрос или откройте сохранённую сессию.');
-  if (tab === 'stats') return metrics(session.stats);
-  if (tab === 'doctor')
-    return el(
-      'div',
-      {},
-      button('Разобрать сессию', ctx.diagnose),
-      ctx.doctor
-        ? el(
-            'div',
-            {},
-            text('p', ctx.doctor.limits, 'muted'),
-            details('Расход доктора', ctx.doctor.doctorUsage, session.id + '-doctor'),
-            ...(ctx.doctor.runs ?? []).map((r) =>
-              details('Расход запуска ' + short(r.run_id), r.stats, r.run_id + '-stats'),
-            ),
-          )
+
+function outputs(run, ctx) {
+  const proposals = new Map();
+  const files = new Map();
+  for (const event of run.events ?? []) {
+    const d = event.data;
+    if (event.type === 'tool_call' && d.tool === 'write_file') proposals.set(d.call_id, d.args);
+    const args = proposals.get(d.call_id);
+    if (
+      event.type === 'tool_result' &&
+      d.result?.ok &&
+      typeof args?.path === 'string' &&
+      typeof args?.content === 'string'
+    )
+      files.set(args.path, { content: args.content, event });
+  }
+  return [...files].map(([path, { content, event }]) =>
+    el(
+      'details',
+      { class: 'thread-file', 'data-detail': event.id + '-file' },
+      el(
+        'summary',
+        {},
+        icon('file'),
+        el('span', {}, text('b', path), text('small', 'Записан в рабочую папку')),
+        icon('chevron-down'),
+      ),
+      text('pre', content, 'answer-code'),
+      ctx.openEvent
+        ? button('Показать запись в журнале', () => ctx.openEvent(event.id), 'thread-link')
         : null,
-      sectionTitle('Находки', session.findings?.length ?? 0),
-      (session.findings ?? []).map((f) =>
-        group(
-          {
-            repeated_error: 'Повтор ошибки',
-            same_content: 'Повторное чтение',
-            missing_evidence: 'Результат без проверки',
-          }[f.kind] ?? f.kind,
-          text('p', f.interpretation),
-          text('p', f.suggestion),
-          el(
-            'details',
-            { 'data-detail': f.run_id + f.kind },
-            el('summary', {}, 'Основания · ' + number(f.count)),
-            text('p', 'Запуск ' + f.run_id, 'muted'),
-            (f.event_ids ?? []).map((id) =>
-              button('Событие ' + short(id), () => ctx.openEvent(id), 'text-button'),
-            ),
-          ),
+    ),
+  );
+}
+
+function copyReply(value) {
+  if (!navigator.clipboard?.writeText) return null;
+  const copy = el(
+    'button',
+    {
+      type: 'button',
+      class: 'copy-reply',
+      title: 'Копировать ответ',
+      'aria-label': 'Копировать ответ',
+    },
+    icon('copy'),
+  );
+  copy.onclick = async () => {
+    try {
+      await navigator.clipboard.writeText(value);
+      copy.replaceChildren(icon('check'), text('span', 'Скопировано'));
+    } catch {
+      copy.replaceChildren(icon('copy'), text('span', 'Копирование недоступно'));
+    }
+  };
+  return copy;
+}
+
+function taskList(run) {
+  if (!run.tasks?.length) return null;
+  const done = run.tasks.filter((t) => t.status === 'completed').length;
+  return el(
+    'details',
+    { 'data-detail': run.id + '-tasks', class: 'turn-tasks' },
+    el(
+      'summary',
+      {},
+      icon('list'),
+      text('span', 'Задачи'),
+      text('span', done + ' / ' + run.tasks.length),
+      icon('chevron-down'),
+    ),
+    el(
+      'ul',
+      {},
+      run.tasks.map((t) =>
+        el(
+          'li',
+          {},
+          icon(t.status === 'completed' ? 'check' : 'chevron-right'),
+          text('span', t.description),
         ),
       ),
-      !session.findings?.length
-        ? empty('Диагнозы появятся при наличии подтверждающих событий.')
+    ),
+  );
+}
+
+function turn(run, ctx) {
+  const waiting = ['awaiting_action', 'awaiting_plan'].includes(run.status);
+  const time =
+    run.createdAt &&
+    new Date(run.createdAt).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+  return el(
+    'article',
+    { class: 'turn', 'aria-label': 'Запуск ' + short(run.id) },
+    el(
+      'div',
+      { class: 'user-message' },
+      el('span', { class: 'sr' }, 'Вы'),
+      text('div', run.prompt, 'bubble'),
+      time ? text('time', time) : null,
+    ),
+    el(
+      'div',
+      { class: 'agent-message' },
+      el(
+        'div',
+        { class: 'agent-byline' },
+        icon('brand'),
+        text('b', 'Агент'),
+        run.status === 'completed'
+          ? null
+          : text('span', statusNames[run.status] ?? run.status, 'run-state'),
+      ),
+      journal(run, ctx),
+      run.final ? answerBody(run.final) : null,
+      run.reason && !waiting ? text('p', run.reason, 'run-reason') : null,
+      ['blocked', 'conflict'].includes(run.status) && ctx.action
+        ? button(
+            'Продолжить запуск',
+            () => ctx.action('resume', { runId: run.id }),
+            'thread-button',
+          )
         : null,
-    );
-  return timeline(session.runs ?? [], ctx);
+      outputs(run, ctx),
+      approval(run, ctx),
+      el('div', { class: 'turn-footer' }, taskList(run), run.final ? copyReply(run.final) : null),
+    ),
+  );
+}
+
+export function transcript(session, ctx) {
+  return (session?.runs ?? []).map((run) => turn(run, ctx));
 }

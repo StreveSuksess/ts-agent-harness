@@ -4,72 +4,135 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light" />
-    <title>Студия агента</title>
-    <link rel="icon" href="data:," />
+    <title>Harness · Студия агента</title>
+    <link rel="icon" href="/mark.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/studio.css" />
+    <link rel="stylesheet" href="/thread.css" />
+    <link rel="stylesheet" href="/panels.css" />
     <script type="module" src="/app.js"></script>
   </head>
   <body>
-    <aside class="rail">
-      <a class="brand" href="#chat"
-        ><b class="brand-mark" aria-hidden="true">›_</b><span>Студия агента</span></a
-      >
-      <nav aria-label="Разделы">
-        <a data-page="chat" href="#chat"><i aria-hidden="true">▣</i>Диалог</a
-        ><a data-page="settings" href="#settings"><i aria-hidden="true">⊞</i>Расширения</a
-        ><a data-page="evals" href="#evals"><i aria-hidden="true">▥</i>Оценка качества</a>
-      </nav>
-      <div class="rail-heading">
-        <span>Сессии</span
-        ><button
-          id="new-session"
-          class="icon-button"
-          aria-label="Новый диалог"
-          title="Новый диалог"
+    <a href="#main" class="skip-link">Перейти к содержимому</a>
+    <aside id="rail" class="rail" aria-label="Навигация">
+      <div class="brand-row">
+        <a class="brand" href="#chat" aria-label="Harness · Новый диалог"
+          ><span data-icon="brand"></span>Harness</a
         >
-          ＋
-        </button>
+        <button
+          class="icon-button rail-close"
+          title="Скрыть меню"
+          aria-label="Скрыть меню"
+          data-icon="panel-left"
+        ></button>
       </div>
+      <nav class="nav-group" aria-label="Чаты">
+        <button id="new-session" class="nav-item">
+          <span data-icon="compose"></span>Новый диалог
+        </button>
+        <button id="search" class="nav-item" aria-label="Поиск диалогов">
+          <span data-icon="search"></span>Поиск<kbd id="search-key">⌘ K</kbd>
+        </button>
+      </nav>
+      <h2 class="rail-label">История</h2>
       <div id="sessions" class="sessions"></div>
-      <div class="connection" role="status">
-        <i id="light"></i><span id="connection">Подключение…</span>
+      <div class="rail-foot">
+        <nav class="nav-group" aria-label="Инструменты">
+          <a class="nav-item" data-page="settings" href="#settings"
+            ><span data-icon="layers"></span>Расширения</a
+          >
+          <a class="nav-item" data-page="evals" href="#evals"
+            ><span data-icon="chart"></span>Оценка качества</a
+          >
+        </nav>
+        <div class="connection" role="status">
+          <span class="host-icon" data-icon="terminal"></span>
+          <div>
+            <strong>Локальный сервер</strong
+            ><small><i id="light"></i><span id="connection">Подключение…</span></small>
+          </div>
+        </div>
       </div>
     </aside>
-    <main>
+    <button class="backdrop" id="rail-backdrop" aria-label="Закрыть меню" hidden></button>
+    <main id="main" tabindex="-1">
       <header class="top">
+        <button
+          class="icon-button rail-open"
+          id="rail-open"
+          aria-controls="rail"
+          title="Показать меню"
+          aria-label="Показать меню"
+          data-icon="panel-left"
+        ></button>
         <div class="crumb">
-          Рабочее пространство <span>/</span> <strong id="crumb">Диалог</strong>
+          <span data-icon="folder"></span><span class="space-name">Трекер задач</span
+          ><span class="slash">/</span><span id="crumb">Новый диалог</span>
         </div>
-        <code>localhost</code>
+        <button
+          id="inspect"
+          class="top-button"
+          aria-controls="inspector"
+          aria-expanded="false"
+          hidden
+        >
+          <span data-icon="panel-right"></span>Инспектор
+        </button>
       </header>
       <p id="issues" role="alert" hidden></p>
-      <section id="chat-page" class="view">
-        <div class="title-row">
-          <div>
-            <p class="eyebrow" id="session-id">НОВАЯ СЕССИЯ</p>
-            <h1 id="title">Диалог</h1>
-          </div>
-          <button id="inspect" class="outline" aria-expanded="true">Инспектор</button>
-        </div>
+      <section id="chat-page" class="view fresh" aria-label="Диалог">
         <div class="workarea">
           <div class="conversation">
-            <div id="transcript" class="transcript"></div>
-            <form id="compose">
-              <label for="prompt" class="sr">Сообщение агенту</label
-              ><textarea
-                id="prompt"
-                required
-                maxlength="12000"
-                placeholder="Что поручить агенту?"
-                rows="2"
-              ></textarea>
-              <div class="composer-bar">
-                <span id="mode-hint"></span><button class="primary" id="send">Отправить ↗</button>
+            <div id="transcript" class="transcript" aria-label="Переписка"></div>
+            <div class="compose-zone">
+              <div id="greeting" class="welcome">
+                <span class="hero-mark" data-icon="brand"></span>
+                <h1>Чем займёмся?</h1>
               </div>
-            </form>
+              <form id="compose">
+                <label class="sr" for="prompt">Сообщение агенту</label
+                ><textarea
+                  id="prompt"
+                  rows="2"
+                  required
+                  maxlength="12000"
+                  placeholder="Поставьте задачу агенту…"
+                ></textarea>
+                <div class="composer-bar">
+                  <a
+                    class="mode-button"
+                    id="mode-link"
+                    href="#settings/mode"
+                    title="Настроить режим агента"
+                    ><span data-icon="shield"></span><span id="mode-hint">С подтверждением</span></a
+                  >
+                  <span id="model-name" class="model-name"></span>
+                  <button
+                    id="send"
+                    class="send"
+                    type="submit"
+                    aria-label="Отправить"
+                    title="Отправить (Enter)"
+                    disabled
+                    data-icon="arrow-up"
+                  ></button>
+                </div>
+              </form>
+              <div id="suggestions" class="suggestions">
+                <h2>С чего начать</h2>
+                <div id="prompt-examples"></div>
+              </div>
+            </div>
           </div>
-          <aside id="inspector" class="inspector">
-            <div class="inspector-title">Инспектор сессии</div>
+          <aside id="inspector" class="inspector" aria-label="Инспектор сессии" hidden>
+            <div class="inspect-head">
+              <strong>Инспектор сессии</strong
+              ><button
+                id="inspect-close"
+                class="icon-button"
+                aria-label="Закрыть инспектор"
+                data-icon="x"
+              ></button>
+            </div>
             <div class="tabs" id="inspect-tabs">
               <button data-inspect="events">События</button
               ><button data-inspect="stats">Расход</button
@@ -79,27 +142,40 @@
           </aside>
         </div>
       </section>
-      <section id="settings-page" class="view" hidden>
-        <div class="title-row">
-          <div>
-            <h1>Расширения</h1>
+      <section id="settings-page" class="view detail-page" hidden>
+        <div class="detail-wrap">
+          <h1>Расширения</h1>
+          <div class="tabs" id="settings-tabs" aria-label="Настройки расширений">
+            <button data-section="skills">Скиллы</button><button data-section="mcp">MCP</button
+            ><button data-section="market">Маркет</button><button data-section="mode">Режим</button>
           </div>
+          <div id="settings-panel"></div>
         </div>
-        <div class="tabs" id="settings-tabs">
-          <button data-section="skills">Скиллы</button><button data-section="mcp">MCP</button
-          ><button data-section="market">Маркет</button><button data-section="mode">Режим</button>
-        </div>
-        <div id="settings-panel"></div>
       </section>
-      <section id="evals-page" class="view" hidden>
-        <div class="title-row">
-          <div>
-            <h1>Оценка качества</h1>
-          </div>
+      <section id="evals-page" class="view detail-page" hidden>
+        <div class="detail-wrap">
+          <h1>Оценка качества</h1>
+          <div id="evaluations"></div>
         </div>
-        <div id="evaluations"></div>
       </section>
     </main>
+    <dialog id="search-dialog" aria-label="Поиск диалогов">
+      <div class="search-input">
+        <span data-icon="search"></span
+        ><input
+          id="search-input"
+          type="search"
+          placeholder="Найти диалог…"
+          aria-label="Запрос для поиска"
+        /><button
+          class="icon-button"
+          id="close-search"
+          aria-label="Закрыть поиск"
+          data-icon="x"
+        ></button>
+      </div>
+      <div id="search-results"></div>
+    </dialog>
     <div id="notice" role="status" aria-live="polite" hidden></div>
   </body>
 </html>

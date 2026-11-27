@@ -1,0 +1,564 @@
+/* Secondary pages share a narrow reading column with the conversation. */
+#settings-panel,
+#evaluations {
+  min-width: 0;
+  padding-bottom: 40px;
+}
+#settings-panel {
+  max-width: 760px;
+}
+#evaluations {
+  max-width: 860px;
+}
+:is(#settings-panel, #evaluations, .event-modal) {
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.5;
+  --fine: color-mix(in srgb, var(--line) 67%, transparent);
+
+  .panel {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    margin: 32px 0;
+  }
+  h2,
+  h3,
+  p,
+  pre,
+  dl,
+  dd {
+    margin: 0;
+  }
+  h2 {
+    font-size: 18px;
+    line-height: 1.35;
+    font-weight: 610;
+    letter-spacing: -0.025em;
+  }
+  h3,
+  .row strong {
+    font-size: 14px;
+    line-height: 1.5;
+    font-weight: 580;
+  }
+  .panel > h2 {
+    margin-bottom: 14px;
+  }
+  .panel > .outline:last-child {
+    margin-top: 12px;
+  }
+  :is(p, small, details, .suite-subtitle) {
+    color: var(--muted);
+    overflow-wrap: anywhere;
+  }
+  small {
+    font-size: 12px;
+  }
+  .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    border-bottom: 1px solid var(--fine);
+    padding: 14px 0;
+  }
+  .row-text {
+    min-width: 0;
+  }
+  .row-text p,
+  .catalog-body > p {
+    margin: 3px 0 0;
+    font-size: 13px;
+  }
+  .row-actions,
+  .buttons,
+  .item-heading,
+  .tool-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .buttons,
+  .item-heading {
+    flex-wrap: wrap;
+  }
+  .chip {
+    display: inline-block;
+    background: var(--wash);
+    color: var(--muted);
+    padding: 2px 7px;
+    border-radius: 5px;
+    font:
+      500 11px/1.6 ui-monospace,
+      Menlo,
+      monospace;
+    white-space: nowrap;
+  }
+  .chip.warn {
+    color: #8a4634;
+    background: #f6e9e2;
+  }
+  .chip.success {
+    color: #405e4b;
+    background: #eaf0e9;
+  }
+  .outline,
+  .primary,
+  .archive-link {
+    min-height: 32px;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    padding: 6px 11px;
+    color: var(--ink);
+    background: var(--panel);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 540;
+    cursor: pointer;
+  }
+  .outline:hover,
+  .archive-link:hover {
+    background: var(--wash);
+  }
+  .primary {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--panel);
+  }
+  .primary:hover {
+    background: color-mix(in srgb, var(--ink) 86%, var(--panel));
+  }
+  button:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+  .text-button,
+  .journal-link {
+    padding: 5px 1px;
+    background: transparent;
+    color: var(--accent);
+    border: 0;
+    text-align: left;
+    font-size: 12px;
+  }
+  .text-button:hover,
+  .journal-link:hover {
+    text-decoration: underline;
+  }
+  .journal-link {
+    font-family: ui-monospace, Menlo, monospace;
+  }
+  select {
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    padding: 7px 9px;
+    background: var(--panel);
+    max-width: 100%;
+    color: var(--ink);
+    font-size: 13px;
+  }
+  details {
+    margin: 0;
+    font-size: 12px;
+  }
+  summary {
+    cursor: pointer;
+    padding: 6px 0;
+  }
+  summary:hover {
+    color: var(--ink);
+  }
+  pre {
+    max-height: 300px;
+    overflow: auto;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    padding: 12px 14px;
+    border-radius: 7px;
+    background: var(--wash);
+    color: var(--ink);
+    font:
+      12px/1.55 ui-monospace,
+      Menlo,
+      monospace;
+  }
+}
+/* Extension directory and marketplace controls. */
+.catalog-item,
+.server-header {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 14px;
+}
+.catalog-item,
+.server-item {
+  padding: 18px 0;
+  border-top: 1px solid var(--line);
+}
+.catalog-body {
+  min-width: 0;
+}
+.catalog-glyph {
+  width: 36px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--panel);
+  color: var(--muted);
+}
+.catalog-glyph svg {
+  width: 18px;
+  height: 18px;
+}
+.catalog-item details {
+  margin-top: 6px;
+}
+.catalog-item .switch {
+  margin-top: 7px;
+}
+.tool-directory {
+  margin: 12px 0 0 50px;
+  border-top: 1px solid var(--fine);
+  padding-top: 8px;
+}
+.tool-head {
+  justify-content: space-between;
+}
+.tool-head strong {
+  font-size: 12px;
+}
+.tool-directory details svg {
+  width: 15px;
+  height: 15px;
+  vertical-align: text-bottom;
+  margin: 0 6px 0 2px;
+}
+.tool-directory details pre {
+  margin-top: 8px;
+}
+.switch {
+  width: 42px;
+  height: 28px;
+  position: relative;
+  display: grid;
+  align-items: center;
+  flex: none;
+}
+.switch input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.switch span {
+  pointer-events: none;
+  width: 34px;
+  height: 20px;
+  margin-inline: auto;
+  border-radius: 12px;
+  background: #a4a09a;
+}
+.switch span::after {
+  content: '';
+  display: block;
+  margin: 3px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.15s ease;
+}
+.switch input:checked + span {
+  background: var(--ink);
+}
+.switch input:checked + span::after {
+  transform: translateX(14px);
+}
+.switch input:focus-visible + span {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.market-search {
+  max-width: 390px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 0 9px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  color: var(--muted);
+  background: var(--panel);
+}
+.market-search input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 8px 0;
+  color: var(--ink);
+  font: inherit;
+}
+.market-search:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.market-search input:focus-visible {
+  outline: 0;
+}
+/* Result overview and progressive disclosure of trial data. */
+.eval-actions,
+.suite-title,
+.modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.eval-actions {
+  margin: 8px 0 26px;
+}
+.eval-actions p,
+.suite-subtitle {
+  font-size: 12px;
+}
+#evaluations .report {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 18px 22px 4px;
+  margin: 14px 0;
+  background: var(--panel);
+}
+.suite-subtitle {
+  padding-top: 3px;
+}
+#evaluations .metric-caption {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 500;
+  margin: 18px 0 7px;
+}
+.result-comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10%;
+}
+.result-variant {
+  min-width: 0;
+}
+.result-variant dt {
+  font-size: 13px;
+}
+.result-ratio {
+  display: block;
+  color: var(--muted);
+  font:
+    13px/1.3 ui-monospace,
+    Menlo,
+    monospace;
+}
+.result-ratio strong {
+  font:
+    550 30px/1.3 system-ui,
+    sans-serif;
+  color: var(--ink);
+  letter-spacing: -0.05em;
+}
+.result-variant meter {
+  display: block;
+  width: 100%;
+  height: 5px;
+  margin: 7px 0 16px;
+  appearance: none;
+  border: 0;
+  border-radius: 5px;
+  background: var(--wash);
+}
+.result-variant meter::-webkit-meter-bar {
+  height: 5px;
+  background: var(--wash);
+  border: 0;
+}
+.result-variant meter::-webkit-meter-optimum-value {
+  background: var(--muted);
+  border-radius: 4px;
+}
+.result-variant:nth-child(2) meter::-webkit-meter-optimum-value {
+  background: var(--accent);
+}
+.result-variant meter::-moz-meter-bar {
+  background: var(--muted);
+  border-radius: 4px;
+}
+.result-variant:nth-child(2) meter::-moz-meter-bar {
+  background: var(--accent);
+}
+.gate-decision {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  font-size: 12px;
+  color: var(--muted);
+  padding: 4px 0 14px;
+}
+.data-fold {
+  border-top: 1px solid var(--fine);
+}
+#evaluations .data-fold > summary,
+#evaluations .archive-examples > summary {
+  font-size: 13px;
+  font-weight: 540;
+  padding: 11px 0;
+}
+.table-scroll {
+  overflow-x: auto;
+  max-height: 370px;
+  margin-bottom: 12px;
+}
+.table-scroll table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.table-scroll th,
+.table-scroll td {
+  white-space: nowrap;
+  text-align: left;
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--fine);
+}
+.table-scroll th {
+  position: sticky;
+  top: 0;
+  background: var(--wash);
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 570;
+}
+.table-scroll td pre {
+  width: 240px;
+  white-space: pre-wrap;
+}
+.archive-examples {
+  margin-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.archive-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+/* The journal and archived conversations reuse one modal surface. */
+.event-modal {
+  width: min(680px, calc(100% - 28px));
+  max-height: min(84dvh, 900px);
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  color: var(--ink);
+  background: var(--panel);
+  box-shadow: 0 14px 70px #29211930;
+}
+.event-modal[open] {
+  display: flex;
+  flex-direction: column;
+}
+.event-modal::backdrop {
+  background: #23201d60;
+}
+.modal-head {
+  flex: none;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--line);
+}
+.modal-head code,
+.archive-session-id {
+  font-size: 11px;
+  overflow-wrap: anywhere;
+  color: var(--muted);
+}
+.modal-scroll {
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 18px 22px;
+  min-width: 0;
+}
+.modal-scroll .panel {
+  margin: 0 0 24px;
+}
+.modal-scroll details > summary {
+  padding: 9px 0;
+}
+.archive-session-id {
+  display: block;
+  margin: 0 0 16px;
+}
+.archive-file {
+  padding: 8px 0;
+}
+.archive-file pre {
+  margin: 5px 0;
+}
+.archive-thread {
+  margin-bottom: 20px;
+}
+.journal-list details {
+  border-bottom: 1px solid var(--fine);
+}
+.journal-list summary b {
+  color: var(--ink);
+  font-weight: 540;
+}
+.journal-list summary time,
+.journal-list summary code {
+  font:
+    11px ui-monospace,
+    Menlo,
+    monospace;
+  margin-inline: 7px;
+}
+.finding-detail {
+  display: grid;
+  gap: 5px;
+  margin: 10px 0;
+}
+@media (max-width: 620px) {
+  #evaluations .report {
+    padding: 16px 14px 3px;
+  }
+  .suite-title,
+  .eval-actions,
+  .gate-decision {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .catalog-item,
+  .server-header {
+    gap: 9px;
+    grid-template-columns: 28px minmax(0, 1fr) auto;
+  }
+  .catalog-glyph {
+    width: 28px;
+    height: 32px;
+  }
+  .tool-directory {
+    margin-left: 0;
+  }
+  .modal-head,
+  .modal-scroll {
+    padding: 15px;
+  }
+  #settings-panel .row {
+    flex-wrap: wrap;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .switch span::after {
+    transition: none;
+  }
+}

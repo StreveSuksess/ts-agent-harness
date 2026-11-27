@@ -44,6 +44,13 @@ test('web studio serves its UI, forwards state and commands, rejects foreign pag
     'evaluations.js',
     'examples.js',
     'dom.js',
+    'icons.js',
+    'workspace.js',
+    'thread.css',
+    'panels.css',
+    'inspection.js',
+    'approval.js',
+    'mark.svg',
   ]) {
     assert.equal((await get('/' + asset)).status, 200);
   }

@@ -12,10 +12,25 @@ export interface StudioApi {
 
 const assets = new Map([
   ['/', ['index.html', 'text/html']],
-  ...['app', 'dom', 'chat', 'settings', 'evaluations', 'examples'].map(
+  ...[
+    'app',
+    'dom',
+    'chat',
+    'settings',
+    'evaluations',
+    'examples',
+    'icons',
+    'workspace',
+    'inspection',
+    'approval',
+  ].map(
     (name) => ['/' + name + '.js', [name + '.js', 'application/javascript']] as [string, string[]],
   ),
-  ['/studio.css', ['studio.css', 'text/css']],
+  ...['studio', 'thread', 'panels'].map((name) => [
+    '/' + name + '.css',
+    [name + '.css', 'text/css'],
+  ]),
+  ['/mark.svg', ['mark.svg', 'image/svg+xml']],
 ] as [string, string[]][]);
 
 function json(response: ServerResponse, status: number, value: unknown): void {

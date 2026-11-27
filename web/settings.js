@@ -1,3 +1,4 @@
+import { icon } from './icons.js';
 import { el, text, button, details, group, row, chip, short, pretty, when, empty } from './dom.js';
 
 function toggle(label, value, apply) {
@@ -29,19 +30,26 @@ function installed(state, ctx) {
       const enabled = skill.enabled ?? !(state.settings?.disabledSkills ?? []).includes(skill.name);
       return el(
         'div',
-        { class: 'item' },
-        row(
-          skill.name,
-          skill.description,
-          chip(skill.version ?? 'локальный'),
-          toggle('Включить ' + skill.name, enabled, (value) =>
-            ctx.action('skill.toggle', { name: skill.name, enabled: value }),
+        { class: 'catalog-item' },
+        el('div', { class: 'catalog-glyph' }, icon('layers')),
+        el(
+          'div',
+          { class: 'catalog-body' },
+          el(
+            'div',
+            { class: 'item-heading' },
+            text('h3', skill.name),
+            chip(skill.version ?? 'локальный'),
+          ),
+          text('p', skill.description),
+          details(
+            'Источник и ревизия',
+            { source: skill.source, version: skill.version, hash: skill.hash },
+            skill.name,
           ),
         ),
-        details(
-          'Источник и ревизия',
-          { source: skill.source, version: skill.version, hash: skill.hash },
-          skill.name,
+        toggle('Включить ' + skill.name, enabled, (value) =>
+          ctx.action('skill.toggle', { name: skill.name, enabled: value }),
         ),
       );
     }),
@@ -50,31 +58,49 @@ function installed(state, ctx) {
 function servers(state, ctx) {
   return group(
     'MCP-серверы',
-    empty(
-      'Подключайте серверы из доверенной конфигурации. Схемы инструментов поступают от сервера.',
-    ),
     (state.mcp ?? []).map((s) =>
       el(
         'div',
-        { class: 'item' },
-        row(
-          s.name,
-          s.error ?? (s.enabled ? 'Подключён к агенту' : 'Отключён'),
-          chip((s.tools?.length ?? 0) + ' инстр.'),
+        { class: 'server-item' },
+        el(
+          'div',
+          { class: 'server-header' },
+          el('div', { class: 'catalog-glyph' }, icon('boxes')),
+          el(
+            'div',
+            { class: 'catalog-body' },
+            text('h3', s.name),
+            text('p', s.error ?? (s.enabled ? 'Подключён к агенту' : 'Отключён')),
+          ),
           s.enabled
             ? button('Отключить', () => ctx.action('mcp.toggle', { name: s.name, enabled: false }))
             : button('Подключить', () => ctx.action('mcp.connect', { name: s.name }), 'primary'),
         ),
         s.enabled
-          ? button(
-              'Обновить инструменты',
-              () => ctx.action('mcp.connect', { name: s.name }),
-              'text-button',
+          ? el(
+              'div',
+              { class: 'tool-directory' },
+              el(
+                'div',
+                { class: 'tool-head' },
+                text('strong', 'Инструменты · ' + (s.tools?.length ?? 0)),
+                button(
+                  'Обновить инструменты',
+                  () => ctx.action('mcp.connect', { name: s.name }),
+                  'text-button',
+                ),
+              ),
+              (s.tools ?? []).map((t) =>
+                el(
+                  'details',
+                  { 'data-detail': s.name + '/' + (t.name ?? t) },
+                  el('summary', {}, icon('terminal'), text('b', t.name ?? t)),
+                  typeof t === 'object' && t.description ? text('p', t.description) : null,
+                  text('pre', pretty(t.inputSchema ?? t)),
+                ),
+              ),
             )
           : null,
-        (s.tools ?? []).map((t) =>
-          details(typeof t === 'string' ? t : t.name, t, s.name + (t.name ?? t)),
-        ),
       ),
     ),
     !state.mcp?.length ? empty('В конфигурации нет доступных серверов.') : null,
@@ -107,7 +133,12 @@ function searchSkills(available, ctx) {
   }
   search.addEventListener('input', apply);
   apply();
-  return el('div', {}, search, suggestions);
+  return el(
+    'div',
+    {},
+    el('label', { class: 'market-search' }, icon('search'), search),
+    suggestions,
+  );
 }
 function marketPanel(state, ctx) {
   const m = state.market ?? {};
@@ -122,7 +153,7 @@ function marketPanel(state, ctx) {
       'Источник маркета',
       row(
         'Версия каталога',
-        'Выбор снимка демонстрационного источника',
+        null,
         select(
           'Версия каталога',
           [
@@ -135,12 +166,12 @@ function marketPanel(state, ctx) {
       ),
       row(
         'Проверка при запуске',
-        'Проверять сведения о скиллах автоматически',
+        'Искать новые версии при открытии студии.',
         toggle('Проверять маркет', prefs.check, (v) => configure({ check: v })),
       ),
       row(
         'Автообновление',
-        'Проверять кандидата через eval перед применением',
+        'Применять обновление после успешного сравнения версий.',
         toggle('Автообновление', prefs.autoUpdate, (v) => configure({ autoUpdate: v })),
       ),
       button('Проверить сейчас', () => ctx.action('market.check')),
@@ -154,7 +185,7 @@ function marketPanel(state, ctx) {
             `${short(m.candidate.oldHash)} → ${short(m.candidate.newHash)}`,
             button('Проверить кандидата', () => ctx.action('market.evaluate'), 'primary'),
           )
-        : empty('Кандидат обновления отсутствует.'),
+        : empty('Обновлений для проверки пока нет.'),
       m.lastDecision
         ? el(
             'div',
@@ -206,7 +237,7 @@ export function settingsPage(state, tab, ctx) {
       ),
       row(
         'Предварительный план',
-        'Показывать план перед началом работы',
+        'Сначала согласовать план, затем приступить к работе.',
         toggle('Требовать план', state.settings?.plan !== false, (v) =>
           ctx.action('settings', { plan: v }),
         ),
