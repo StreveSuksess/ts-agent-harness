@@ -1,34 +1,36 @@
+import { cliCommand } from './paths.js';
 export const HELP = `Агент для работы с кодом
 
 Начать
-  ./agent                           Ввести задачу в терминале
-  ./agent "Исправь расчёт заказа"    Запустить задачу на отдельной копии примера
-  ./agent run "Проверь тесты" --workspace ./project --policy ./policy.json
+  ${cliCommand}                           Открыть диалог и вводить запросы по очереди
+  ${cliCommand} "Исправь расчёт заказа"    Запустить задачу на отдельной копии примера
+  ${cliCommand} run "Проверь тесты" --workspace ./project --policy ./policy.json
 
 Во время работы
+  После ответа вводите следующий запрос в той же рабочей папке. Выход — /exit.
   В терминале видны вызовы модели и ответы инструментов. На запрос решения
   введите да, нет или нажмите Enter, чтобы отложить. При отказе от плана
   можно пояснить причину, например «нет запусти тесты через unittest».
 
 Сохранённые запуски
-  ./agent runs                       История с короткими ID
-  ./agent resume [ID]                Продолжить с места остановки
-  ./agent status [ID]                Состояние и причина остановки
-  ./agent trace [ID]                 Предложения модели и результаты инструментов
-  ./agent tasks [ID]                 Чеклист задач
-  ./agent diff [ID]                  Изменения файлов
+  ${cliCommand} runs                       История с короткими ID
+  ${cliCommand} resume [ID]                Продолжить с места остановки
+  ${cliCommand} status [ID]                Состояние и причина остановки
+  ${cliCommand} trace [ID]                 Предложения модели и результаты инструментов
+  ${cliCommand} tasks [ID]                 Чеклист задач
+  ${cliCommand} diff [ID]                  Изменения файлов
 
   Если ID опущен, выбирается последний созданный запуск в выбранной базе.
   Для более раннего запуска укажите ID целиком или его однозначное начало.
 
 Пошаговое управление
-  ./agent start --task "Текст"       Выполнить до ближайшей паузы
-  ./agent approve-plan ID --decision approve|reject [--feedback "Исправление"]
-  ./agent approve-action ID --decision allow|deny
-  ./agent resolve ID --decision retry|fail|abort [--attribute yes|no]
-  ./agent rollback ID
-  ./agent resolve-rollback ID
-  ./agent demo                       Демо со сценарной моделью и реальным Bash
+  ${cliCommand} start --task "Текст"       Выполнить до ближайшей паузы
+  ${cliCommand} approve-plan ID --decision approve|reject [--feedback "Исправление"]
+  ${cliCommand} approve-action ID --decision allow|deny
+  ${cliCommand} resolve ID --decision retry|fail|abort [--attribute yes|no]
+  ${cliCommand} rollback ID
+  ${cliCommand} resolve-rollback ID
+  ${cliCommand} demo                       Демо со сценарной моделью и реальным Bash
 
 Параметры
   --workspace ПАПКА     Рабочая папка. По умолчанию run создаёт копию workspace,

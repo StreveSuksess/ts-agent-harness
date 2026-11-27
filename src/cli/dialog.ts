@@ -47,18 +47,17 @@ function readAnswer<T>(
   });
 }
 
-export async function askTask(terminal = stdio): Promise<string | undefined> {
-  const answer = await readAnswer(
-    terminal,
-    'Что поручить агенту? (Enter — выход)\n› ',
-    (line) => line,
-  );
-  return answer && answer.toLowerCase() !== 'q' ? answer : undefined;
+export async function askTask(
+  terminal = stdio,
+  question = 'Что поручить агенту?',
+): Promise<string | undefined> {
+  const answer = await readAnswer(terminal, question + ' (Enter — выход)\n› ', (line) => line);
+  return answer && !['q', '/exit'].includes(answer.toLowerCase()) ? answer : undefined;
 }
 
 function parseApproval(answer: string, forPlan: boolean): ApprovalAnswer | undefined {
   const value = answer.toLowerCase();
-  if (!value || value === 'q') return { decision: 'pause' };
+  if (!value || value === 'q' || value === '/exit') return { decision: 'pause' };
   if (['да', 'д', 'yes', 'y'].includes(value)) return { decision: 'accept' };
 
   const rejection = /^(нет|н|no|n)(?:\s+(.+))?$/iu.exec(answer);

@@ -1,3 +1,4 @@
+import { cliCommand } from './paths.js';
 import type { Runtime } from '../runtime.js';
 import { ApprovalChangedError } from '../runtime/approvals.js';
 import type { RunState } from '../types.js';
@@ -22,7 +23,9 @@ export async function driveRun(
     console.log('\n' + formatReview(run));
     const answer = await askApproval(run);
     if (answer.decision === 'pause') {
-      console.log(`Решение отложено. Продолжить: ./agent resume ${run.id}${dbOption(options.db)}`);
+      console.log(
+        `Решение отложено. Продолжить: ${cliCommand} resume ${run.id}${dbOption(options.db)}`,
+      );
       return run;
     }
 

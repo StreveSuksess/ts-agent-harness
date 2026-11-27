@@ -3,18 +3,18 @@ import { cliModel } from './model-progress.js';
 import { Runtime } from '../runtime.js';
 import { Store } from '../store.js';
 import { InjectedCrash } from '../types.js';
-import type { FaultHook, RunState } from '../types.js';
-import { defaultDatabase, projectRoot } from './paths.js';
+import type { FaultHook, RunStatus } from '../types.js';
+import { cliCommand, defaultDatabase, projectRoot } from './paths.js';
 import { parseArguments } from './arguments.js';
 import { applyDecision } from './decisions.js';
-import { askTask } from './dialog.js';
+import { runChat } from './chat.js';
 import { HELP } from './help.js';
 import { formatHistory, selectRunId } from './history.js';
-import { LiveOutput, outputMode, printState } from './output.js';
+import { LiveOutput, outputMode, printState, showTarget } from './output.js';
 import { formatTasks } from './presentation.js';
 import { driveRun } from './session.js';
 import { startTask } from './start.js';
-import { oneLine, terminalText } from './terminal-text.js';
+import { terminalText } from './terminal-text.js';
 import { formatTrace } from './trace.js';
 
 function faultHook(point: string): FaultHook {
@@ -26,14 +26,10 @@ function faultHook(point: string): FaultHook {
   };
 }
 
-function showTarget(run: RunState): void {
-  console.log(
-    [
-      `Запуск   ${run.id}  ·  ${run.mode}`,
-      `Папка    ${oneLine(run.workspace)}`,
-      `Модель   ${oneLine(process.env.OPENAI_MODEL ?? 'не задана в .env')}`,
-    ].join('\n'),
-  );
+function setRunExitCode(status: RunStatus | undefined): void {
+  if (status && ['blocked', 'conflict', 'failed', 'uncertain'].includes(status)) {
+    process.exitCode = 1;
+  }
 }
 
 export async function runCli(argv: string[]): Promise<void> {
@@ -57,13 +53,9 @@ export async function runCli(argv: string[]): Promise<void> {
     return;
   }
 
-  let task = args.task;
-  if (command === 'run' && !task) {
-    if (!interactive)
-      throw new Error('Укажите задачу, например ./agent run "Исправь расчёт заказа".');
-    console.log('Новая задача · история: ./agent runs · продолжить: ./agent resume');
-    task = await askTask();
-    if (!task) return;
+  const chat = command === 'run' && args.task === undefined;
+  if (chat && !interactive) {
+    throw new Error(`Укажите задачу, например ${cliCommand} run "Исправь расчёт заказа".`);
   }
 
   const db = flags.get('db');
@@ -76,6 +68,10 @@ export async function runCli(argv: string[]): Promise<void> {
       cliModel(mode === 'human' && Boolean(process.stdout.isTTY)),
       point ? { faults: faultHook(point) } : {},
     );
+    if (chat && live) {
+      setRunExitCode(await runChat(runtime, args, live));
+      return;
+    }
     if (command === 'runs') {
       const rows = store.listRuns();
       console.log(mode === 'json' ? JSON.stringify(rows) : formatHistory(rows));
@@ -83,7 +79,9 @@ export async function runCli(argv: string[]): Promise<void> {
     }
 
     const starting = command === 'run' || command === 'start';
-    const run = starting ? startTask(runtime, args, task!) : store.get(selectRunId(store, args.id));
+    const run = starting
+      ? startTask(runtime, args, args.task!)
+      : store.get(selectRunId(store, args.id));
     const id = run.id;
     live?.startAt(run);
 
@@ -122,12 +120,7 @@ export async function runCli(argv: string[]): Promise<void> {
     if (live) showTarget(run);
     applyDecision(runtime, id, args);
     const result = await driveRun(runtime, id, { interactive, mode, db });
-    if (
-      command === 'run' &&
-      ['blocked', 'conflict', 'failed', 'uncertain'].includes(result.status)
-    ) {
-      process.exitCode = 1;
-    }
+    if (command === 'run') setRunExitCode(result.status);
   } finally {
     store.close();
   }

@@ -4,8 +4,14 @@ import { projectRoot } from './paths.js';
 import type { Runtime } from '../runtime.js';
 import type { RunState } from '../types.js';
 import type { CliArguments } from './arguments.js';
+import { conversationContext, type ConversationTurn } from './conversation-context.js';
 
-export function startTask(runtime: Runtime, args: CliArguments, prompt: string): RunState {
+export function startTask(
+  runtime: Runtime,
+  args: CliArguments,
+  prompt: string,
+  followUp?: { workspace: string; history: readonly ConversationTurn[] },
+): RunState {
   const { flags } = args;
   const mode: RunState['mode'] = flags.get('mode') === 'auto' ? 'auto' : 'safe';
   const options = {
@@ -13,8 +19,11 @@ export function startTask(runtime: Runtime, args: CliArguments, prompt: string):
     mode,
     policyFile: resolve(flags.get('policy') ?? resolve(projectRoot, 'policy.example.json')),
     plan: !flags.has('no-plan'),
+    ...(followUp?.history.length
+      ? { conversationContext: conversationContext(followUp.history) }
+      : {}),
   };
-  const workspace = flags.get('workspace');
+  const workspace = followUp?.workspace ?? flags.get('workspace');
   if (workspace || args.command === 'start') {
     return runtime.start({
       ...options,

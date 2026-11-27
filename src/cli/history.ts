@@ -1,17 +1,19 @@
-import { defaultDatabase } from './paths.js';
+import { cliCommand, defaultDatabase } from './paths.js';
 import type { RunSummary, Store } from '../store.js';
 import { statusLabel } from './presentation.js';
 import { dbOption, oneLine } from './terminal-text.js';
 
 export function selectRunId(store: Store, input?: string): string {
   const db = dbOption(store.file === defaultDatabase ? undefined : store.file);
-  const listCommand = './agent runs' + db;
+  const listCommand = `${cliCommand} runs${db}`;
 
   if (input === undefined) {
     const latest = store.listRuns(1)[0];
 
     if (!latest) {
-      throw new Error('В этой базе пока нет запусков. Начните задачу командой ./agent run' + db);
+      throw new Error(
+        `В этой базе пока нет запусков. Начните задачу командой ${cliCommand} run${db}`,
+      );
     }
 
     return latest.id;
@@ -42,7 +44,7 @@ const localDate = new Intl.DateTimeFormat('ru-RU', { dateStyle: 'short', timeSty
 
 export function formatHistory(runs: RunSummary[]): string {
   if (!runs.length) {
-    return 'История пуста. Начните первый запуск командой ./agent';
+    return `История пуста. Начните первый запуск командой ${cliCommand}`;
   }
 
   const prefixes = new Set<string>();

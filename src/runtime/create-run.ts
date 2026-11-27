@@ -11,6 +11,7 @@ export interface StartOptions {
   workspace: string;
   policyFile: string;
   prompt: string;
+  conversationContext?: string;
   mode?: 'safe' | 'auto';
   plan?: boolean;
   limits?: Partial<Limits>;
@@ -41,10 +42,7 @@ export function createRun(context: RuntimeContext, options: StartOptions): RunSt
     phase,
     status: 'running',
     prompt: options.prompt,
-    messages: [
-      { role: 'system', content: SYSTEM_PROMPT },
-      { role: 'user', content: options.prompt },
-    ],
+    messages: [{ role: 'system', content: SYSTEM_PROMPT }],
     pending: [],
     calls: Object.create(null) as Record<string, CallRecord>,
     tasks: [],
@@ -58,6 +56,11 @@ export function createRun(context: RuntimeContext, options: StartOptions): RunSt
     changes: Object.create(null) as Record<string, Change>,
     decisions: [],
   };
+
+  if (options.conversationContext) {
+    run.messages.push({ role: 'user', content: options.conversationContext });
+  }
+  run.messages.push({ role: 'user', content: options.prompt });
 
   if (phase === 'execute') {
     run.tasks = [

@@ -14,6 +14,16 @@ export function outputMode({ command, flags, id }: CliArguments): OutputMode {
   return command === 'start' || id ? 'legacy' : 'human';
 }
 
+export function showTarget(run: RunState): void {
+  console.log(
+    [
+      `Запуск   ${run.id}  ·  ${run.mode}`,
+      `Папка    ${oneLine(run.workspace)}`,
+      `Модель   ${oneLine(process.env.OPENAI_MODEL ?? 'не задана в .env')}`,
+    ].join('\n'),
+  );
+}
+
 export function printState(run: RunState, mode: OutputMode, db?: string): void {
   if (mode === 'human') {
     console.log(formatRun(run, db));
@@ -43,12 +53,15 @@ export function printState(run: RunState, mode: OutputMode, db?: string): void {
 
 /** Print each committed tool message once, including results from the last batch before a pause. */
 export class LiveOutput {
-  private messages: number | undefined;
+  private runId?: string;
+  private messages = 0;
   private requests = 0;
   private task: string | null = null;
   private names = new Map<string, string>();
 
   startAt(run: RunState): void {
+    this.runId = run.id;
+    this.names.clear();
     this.messages = run.messages.length;
     this.requests = run.spent.modelRequests;
     this.task = run.activeTaskId;
@@ -58,7 +71,7 @@ export class LiveOutput {
   }
 
   saved(run: RunState): void {
-    if (this.messages === undefined) return;
+    if (this.runId !== run.id) return;
     const added = run.messages.slice(this.messages);
     this.messages = run.messages.length;
     // The terminal summary prints the full final answer.

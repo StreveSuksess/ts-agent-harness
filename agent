@@ -1,7 +1,14 @@
 #!/bin/sh
 set -eu
 
-project=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+# Locate the checkout even when this executable was found via a link in PATH.
+launcher=$(node -p 'require("node:fs").realpathSync(process.argv[1])' "$0")
+project=$(dirname -- "$launcher")
+if [ "$0" = "$(command -v agent || :)" ]; then
+  export TS_AGENT_LAUNCHER=global
+else
+  export TS_AGENT_LAUNCHER=local
+fi
 if [ ! -x "$project/node_modules/.bin/tsc" ]; then
   printf 'Установите зависимости: npm --prefix "%s" ci\n' "$project" >&2
   exit 1

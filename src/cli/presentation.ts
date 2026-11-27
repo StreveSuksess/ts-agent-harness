@@ -1,3 +1,4 @@
+import { cliCommand } from './paths.js';
 import type { Plan, RunState, RunStatus, ToolCall, Verification } from '../types.js';
 import { dbOption, indented, oneLine, quotedArgument, terminalText } from './terminal-text.js';
 
@@ -93,7 +94,7 @@ function lastToolError(run: RunState): string | undefined {
 
 function commandHint(run: RunState, db: string | undefined): string | undefined {
   const id = oneLine(run.id);
-  const cmd = (name: string) => `./agent ${name} ${id}${dbOption(db)}`;
+  const cmd = (name: string) => `${cliCommand} ${name} ${id}${dbOption(db)}`;
   switch (run.status) {
     case 'awaiting_plan':
     case 'awaiting_action':

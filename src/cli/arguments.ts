@@ -1,3 +1,4 @@
+import { cliCommand } from './paths.js';
 import { parseArgs, type ParseArgsOptionsConfig } from 'node:util';
 
 const startFlags = ['task', 'workspace', 'policy', 'mode', 'no-plan', 'fault'];
@@ -63,7 +64,7 @@ export function parseArguments(argv: string[]): CliArguments {
   const name = implicit ? 'run' : first;
   if (!Object.hasOwn(commandFlags, name)) {
     throw new Error(
-      `Неизвестная команда «${name}». Список команд — ./agent --help. Для задачи используйте ./agent run "Текст".`,
+      `Неизвестная команда «${name}». Список команд — ${cliCommand} --help. Для задачи используйте ${cliCommand} run "Текст".`,
     );
   }
   const command = name as Command;
@@ -82,7 +83,7 @@ export function parseArguments(argv: string[]): CliArguments {
     const task = (value ?? flags.get('task'))?.trim();
     if (task) return { command, flags, task };
     if (command === 'start' || value !== undefined || flags.has('task')) {
-      throw new Error('Укажите текст задачи, например ./agent run "Исправь расчёт заказа".');
+      throw new Error(`Укажите текст задачи, например ${cliCommand} run "Исправь расчёт заказа".`);
     }
     return { command, flags };
   }
@@ -105,7 +106,7 @@ export function parseArguments(argv: string[]): CliArguments {
     !value &&
     ['rollback', 'resolve-rollback', 'approve-plan', 'approve-action', 'resolve'].includes(command)
   ) {
-    throw new Error('Укажите ID конкретного запуска из ./agent runs.');
+    throw new Error(`Укажите ID конкретного запуска из ${cliCommand} runs.`);
   }
   return value ? { command, flags, id: value } : { command, flags };
 }
