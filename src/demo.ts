@@ -74,15 +74,16 @@ export const demoResponses = (): AssistantMessage[] => [
   },
 ];
 
-export async function demo(root = resolve('.agent', 'demo', randomUUID())): Promise<string> {
+export async function demo(root?: string, project = resolve('.')): Promise<string> {
+  root ??= resolve(project, '.agent', 'demo', randomUUID());
   const workspace = resolve(root, 'workspace');
 
   mkdirSync(root, { recursive: true });
-  cpSync(resolve('workspace'), workspace, { recursive: true });
+  cpSync(resolve(project, 'workspace'), workspace, { recursive: true });
 
   const policyFile = resolve(root, 'policy.json');
 
-  writeFileSync(policyFile, readFileSync(resolve('policy.example.json')));
+  writeFileSync(policyFile, readFileSync(resolve(project, 'policy.example.json')));
 
   const beforeTests = hash(readFileSync(resolve(workspace, 'test_order.py')));
   const store = new Store(resolve(root, 'state.sqlite'));

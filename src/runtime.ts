@@ -5,6 +5,7 @@ import { createRun } from './runtime/create-run.js';
 import type { StartOptions } from './runtime/create-run.js';
 import { runAgent } from './runtime/agent-loop.js';
 import { decidePlan, decideAction } from './runtime/approvals.js';
+import type { PlanDecisionOptions } from './runtime/approvals.js';
 import { resolveUncertainCall } from './runtime/recovery.js';
 import { getRunDiff, rollbackRun, completeInterruptedRollback } from './runtime/rollback.js';
 import { printTaskChecklist } from './runtime/task-state.js';
@@ -32,12 +33,12 @@ export class Runtime {
     return runAgent(this.context, id);
   }
 
-  approvePlan(id: string, allow: boolean): void {
-    decidePlan(this.context, id, allow);
+  approvePlan(id: string, allow: boolean, options?: PlanDecisionOptions): void {
+    decidePlan(this.context, id, allow, options);
   }
 
-  approveAction(id: string, allow: boolean): void {
-    decideAction(this.context, id, allow);
+  approveAction(id: string, allow: boolean, expectedRevision?: number): void {
+    decideAction(this.context, id, allow, expectedRevision);
   }
 
   resolve(id: string, choice: 'retry' | 'fail' | 'abort', attribute?: boolean): void {

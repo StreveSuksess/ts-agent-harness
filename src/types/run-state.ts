@@ -97,7 +97,14 @@ export interface RunState {
   expected: Tree;
   journal: Change[][];
   changes: Record<string, Change>;
-  decisions: { at: string; kind: string; choice: string; callId?: string; attribute?: boolean }[];
+  decisions: {
+    at: string;
+    kind: string;
+    choice: string;
+    callId?: string;
+    attribute?: boolean;
+    feedback?: string;
+  }[];
   reason?: string;
   final?: string;
   rollbackStarted?: boolean;

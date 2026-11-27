@@ -4,14 +4,45 @@ import { loadPolicy } from './context.js';
 import { selectNextTask, renderPhaseMessage } from './task-state.js';
 import { completeWithoutExecution } from './tool-results.js';
 
-export function decidePlan(context: RuntimeContext, id: string, allow: boolean): void {
-  const run = context.store.get(id);
+export interface PlanDecisionOptions {
+  expectedRevision?: number;
+  feedback?: string;
+}
 
+export class ApprovalChangedError extends Error {
+  constructor() {
+    super('Запуск изменился во время ожидания. Проверьте текущее состояние и повторите решение.');
+  }
+}
+
+function checkRevision(revision: number, expectedRevision?: number): void {
+  if (expectedRevision !== undefined && revision !== expectedRevision) {
+    throw new ApprovalChangedError();
+  }
+}
+
+export function decidePlan(
+  context: RuntimeContext,
+  id: string,
+  allow: boolean,
+  { expectedRevision, feedback }: PlanDecisionOptions = {},
+): void {
+  const run = context.store.get(id);
+  checkRevision(run.revision, expectedRevision);
   if (run.status !== 'awaiting_plan' || !run.plan) {
     throw new Error('Run is not waiting for a plan decision');
   }
+  if (allow && feedback !== undefined) {
+    throw new Error('Комментарий можно передать при отклонении плана.');
+  }
 
-  run.decisions.push({ at: now(), kind: 'plan', choice: allow ? 'approve' : 'reject' });
+  const comment = feedback?.trim();
+  run.decisions.push({
+    at: now(),
+    kind: 'plan',
+    choice: allow ? 'approve' : 'reject',
+    ...(comment ? { feedback: comment } : {}),
+  });
   if (allow) {
     loadPolicy(context, run);
     run.tasks = run.plan.steps.map((step) => ({ ...step, status: 'pending' }));
@@ -19,7 +50,8 @@ export function decidePlan(context: RuntimeContext, id: string, allow: boolean):
     selectNextTask(run);
   } else {
     delete run.plan;
-    run.messages.push({ role: 'user', content: 'Plan rejected. Inspect or propose another plan.' });
+    const rejection = 'Plan rejected. Inspect or propose another plan.';
+    run.messages.push({ role: 'user', content: comment ? `${rejection}\n${comment}` : rejection });
   }
 
   run.status = 'running';
@@ -28,8 +60,14 @@ export function decidePlan(context: RuntimeContext, id: string, allow: boolean):
   context.store.save(run);
 }
 
-export function decideAction(context: RuntimeContext, id: string, allow: boolean): void {
+export function decideAction(
+  context: RuntimeContext,
+  id: string,
+  allow: boolean,
+  expectedRevision?: number,
+): void {
   const run = context.store.get(id);
+  checkRevision(run.revision, expectedRevision);
   const pending = run.pending[0];
 
   if (run.status !== 'awaiting_action' || !pending) {

@@ -1,0 +1,15 @@
+#!/bin/sh
+set -eu
+
+project=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+if [ ! -x "$project/node_modules/.bin/tsc" ]; then
+  printf 'Установите зависимости: npm --prefix "%s" ci\n' "$project" >&2
+  exit 1
+fi
+"$project/node_modules/.bin/tsc" --build "$project/tsconfig.cli.json"
+if [ -f "$project/.env" ]; then
+  set -- "--env-file=$project/.env" "$project/dist/src/cli.js" "$@"
+else
+  set -- "$project/dist/src/cli.js" "$@"
+fi
+exec node --disable-warning=ExperimentalWarning "$@"

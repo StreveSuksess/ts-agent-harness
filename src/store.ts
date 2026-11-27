@@ -12,12 +12,17 @@ import { dirname, resolve } from 'node:path';
 import { inside } from './policy.js';
 import type { RunState } from './types.js';
 
+export type RunSummary = Pick<RunState, 'id' | 'createdAt' | 'prompt' | 'status' | 'workspace'>;
+
 export class Store {
   readonly file: string;
 
   private readonly db: DatabaseSync;
 
-  constructor(file: string) {
+  constructor(
+    file: string,
+    private readonly onSaved?: (run: RunState) => void,
+  ) {
     this.file = resolve(file);
     mkdirSync(dirname(this.file), { recursive: true, mode: 0o700 });
     this.db = new DatabaseSync(this.file);
@@ -50,6 +55,33 @@ export class Store {
     return JSON.parse(storedRow.state as string) as RunState;
   }
 
+  listRuns(limit = -1): RunSummary[] {
+    const rows = this.db
+      .prepare(
+        `
+      SELECT id,
+             json_extract(state, '$.createdAt') AS createdAt,
+             json_extract(state, '$.prompt') AS prompt,
+             json_extract(state, '$.status') AS status,
+             json_extract(state, '$.workspace') AS workspace
+      FROM runs
+      ORDER BY createdAt DESC, rowid DESC
+      LIMIT ?
+    `,
+      )
+      .all(limit);
+
+    return rows.map((row) => ({ ...row }) as RunSummary);
+  }
+
+  matchingRunIds(prefix: string): string[] {
+    const rows = this.db
+      .prepare('SELECT id FROM runs WHERE substr(id, 1, length(?)) = ? ORDER BY id LIMIT 2')
+      .all(prefix, prefix);
+
+    return rows.map((row) => row.id as string);
+  }
+
   save(run: RunState): void {
     this.db.exec('BEGIN IMMEDIATE');
     try {
@@ -78,6 +110,8 @@ export class Store {
       this.db.exec('ROLLBACK');
       throw error;
     }
+
+    this.onSaved?.(run);
   }
 
   async locked<T>(workspace: string, action: () => Promise<T>): Promise<T> {

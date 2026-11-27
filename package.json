@@ -11,7 +11,7 @@
     "build": "tsc",
     "check": "tsc --noEmit",
     "test": "npm run build && node --test dist/tests/*.test.js",
-    "agent": "npm run build --silent && node --env-file-if-exists=.env dist/src/cli.js",
+    "agent": "./agent",
     "demo": "npm run agent -- demo",
     "format": "prettier --write src",
     "format:check": "prettier --check src"
