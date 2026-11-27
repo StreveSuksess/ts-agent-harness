@@ -1,0 +1,98 @@
+{
+  "trace": "ab/trials/outage-B1/events.jsonl",
+  "method": "deterministic-v1",
+  "doctorUsage": {
+    "input": 0,
+    "output": 0
+  },
+  "limits": "Стоимость отдельного инструмента в токенах неизвестна. Совпадение результатов не доказывает бесполезность вызова.",
+  "stats": {
+    "usage": {
+      "input": 13221,
+      "output": 118,
+      "complete": true
+    },
+    "byModel": {
+      "laya": {
+        "input": 295,
+        "output": 0,
+        "complete": true
+      },
+      "generator": {
+        "input": 12926,
+        "output": 118,
+        "complete": true
+      }
+    },
+    "modelRequests": 6,
+    "skills": {
+      "open-tasks": 1
+    },
+    "tools": {
+      "load_skill": 1,
+      "mcp_tracker_list": 5,
+      "complete_task": 1
+    },
+    "mcp": {
+      "tracker/list": 5
+    },
+    "uniqueSkills": 1,
+    "uniqueTools": 3,
+    "errors": 6
+  },
+  "runs": [
+    {
+      "run_id": "b59cfa21-6822-4975-981c-5ec13c97e97d",
+      "stats": {
+        "usage": {
+          "input": 13221,
+          "output": 118,
+          "complete": true
+        },
+        "byModel": {
+          "laya": {
+            "input": 295,
+            "output": 0,
+            "complete": true
+          },
+          "generator": {
+            "input": 12926,
+            "output": 118,
+            "complete": true
+          }
+        },
+        "modelRequests": 6,
+        "skills": {
+          "open-tasks": 1
+        },
+        "tools": {
+          "load_skill": 1,
+          "mcp_tracker_list": 5,
+          "complete_task": 1
+        },
+        "mcp": {
+          "tracker/list": 5
+        },
+        "uniqueSkills": 1,
+        "uniqueTools": 3,
+        "errors": 6
+      }
+    }
+  ],
+  "findings": [
+    {
+      "kind": "repeated_error",
+      "run_id": "b59cfa21-6822-4975-981c-5ec13c97e97d",
+      "event_ids": [
+        "bb6c7d8e-7e12-43ed-9790-203569536af4",
+        "d02f1347-df24-4b15-a7d7-3013fb2aa477",
+        "f9fb178c-69a5-4065-b258-b83549970f90",
+        "4dc5e977-a44b-476d-bb53-6d6015e1ba06",
+        "d26a8144-aacb-4558-aa82-ba4deac72778"
+      ],
+      "count": 5,
+      "interpretation": "Один инструмент с теми же аргументами несколько раз вернул одну ошибку.",
+      "suggestion": "После первого отказа уточните источник данных или разрешённые аргументы, затем смените действие."
+    }
+  ]
+}

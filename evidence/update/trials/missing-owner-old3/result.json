@@ -1,0 +1,41 @@
+{
+  "case_id": "missing-owner",
+  "variant": "old",
+  "trial": 3,
+  "run_id": "45a6d161-82fe-4be2-a8ee-b238187e7e06",
+  "session_id": "f8e57b42-75af-41e6-83cf-1b8188ab652b",
+  "status": "completed",
+  "outcome_pass": false,
+  "routing_pass_or_na": true,
+  "tools_pass": true,
+  "laya_route": {
+    "engine": "laya",
+    "skill": "owner-summary",
+    "marketSkill": null,
+    "mcp": null,
+    "model": "multilingual",
+    "input": 339,
+    "output": 0,
+    "confidence": {
+      "skill": 0.9946,
+      "mcp": 0.6099
+    }
+  },
+  "safety_pass": true,
+  "input_tokens": 14633,
+  "output_tokens": 145,
+  "usage_complete": true,
+  "skill_activations": {
+    "owner-summary": 1
+  },
+  "mcp_calls": {},
+  "tools": {
+    "load_skill": 1,
+    "read_file": 2,
+    "write_file": 1,
+    "complete_task": 1
+  },
+  "tool_errors": 0,
+  "error": null,
+  "events_path": "trials/missing-owner-old3/events.jsonl"
+}

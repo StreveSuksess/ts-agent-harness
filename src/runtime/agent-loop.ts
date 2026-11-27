@@ -1,6 +1,4 @@
-import { definitions } from '../schema.js';
-import { parseAssistant } from '../model.js';
-import { failure } from './tool-results.js';
+import { nextAssistantTurn } from './model-turn.js';
 import type { RuntimeContext } from './context.js';
 import type { RunState } from '../types.js';
 import { stopRun } from './context.js';
@@ -77,18 +75,8 @@ export async function runAgent(context: RuntimeContext, id: string): Promise<Run
         }
       }
 
-      run.spent.modelRequests++;
-      context.store.save(run); // No request replay/refund after a crash.
-      let response;
-
-      try {
-        response = parseAssistant(
-          await context.model.complete(structuredClone(run.messages), definitions),
-        );
-      } catch (error) {
-        stopRun(context, run, 'blocked', `Model request failed: ${failure(error).error}`);
-        break;
-      }
+      const response = await nextAssistantTurn(context, run);
+      if (!response) continue;
 
       run.messages.push(response);
 

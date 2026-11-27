@@ -1,0 +1,100 @@
+{
+  "format": 1,
+  "kind": "ab",
+  "model": {
+    "name": "harness-qwen3:4b-local",
+    "digest": "3dfa271e5cfea1e0b0122294ea312b690126b322f938b5ed16e68d5c4d8c8618",
+    "endpoint": "http://127.0.0.1:11434",
+    "temperature": 0.2,
+    "max_tokens": 384
+  },
+  "router": {
+    "model": "multilingual",
+    "endpoint": "http://127.0.0.1:18000",
+    "checkpoint_sha256": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204",
+    "kind": "Laya System One; one forward pass for typed skill and MCP choice"
+  },
+  "mode": "auto",
+  "plan": false,
+  "attempts": 3,
+  "code": {
+    "cases": "082b3866baace525c9eb470fd10d3968c6ae3041c694ab0c4f4274b1b6a19ba1",
+    "gate": "3d4a6d01495e136c68713841c3908e71c4cf0ea2134bfe1cd4bf112546704465",
+    "trial": "8c3c2abf81e3cf428b000560a9b77ad8f16713f730574631dc283121fc39d75b"
+  },
+  "files": {
+    "fixtures/owners.json": "75d4d7479763832570485d5e4eac6c646df90f69201d63bb5eb5d6cbcdd588dc",
+    "fixtures/project.json": "5e2d2de5dcc92900b4955fe86272e7c9e5732856043eee5d5374aca31aede65c",
+    "fixtures/request.json": "3d0e3a2e4ff100cbdc5dae24be7288cf09a71f8f6ddbdb45c9f2b27fc94a041c",
+    "fixtures/tracker.json": "9a8a022c3d057d04c9013b96f2e0c19052ace335a8069a0ec3c04641414c43ef",
+    "fixtures/unavailable.json": "1fdf55e36e56a54657fcaaa8adc9b60156c032e21bc781aee8e372ab86c70da7",
+    "policy.json": "992fd9072c2785d6e896d7ed2da1ef3dca71dc6f4fbf3ff197d70571381103ff",
+    "PROTOCOL.md": "3983dabb37ba566e071fba65766a54a1fdf13fcf8f26fdc718a10b412c519ae4",
+    "package-lock.json": "965fac6f5dc9724db9c32434fe894d03b9153bffad0dee53d283b221e0557ad0",
+    "skills/old/open-tasks/SKILL.md": "91d4ae16062e44dadc8db83513dac92281f0d683acd0793cd470d034f59e3a1f",
+    "skills/new/open-tasks/SKILL.md": "1880095cc9e30f3f5fda4e92017ae78de4b4f86287495d66cce4a13a89262384",
+    "skills/old/owner-summary/SKILL.md": "aa13dacf48a3b61938e8ba80b91569c597a978bbe9fa9cf4316295e463e2bbab",
+    "skills/new/owner-summary/SKILL.md": "aa13dacf48a3b61938e8ba80b91569c597a978bbe9fa9cf4316295e463e2bbab",
+    "skills/old/release-notes/SKILL.md": "b0234b6652902b63de900917505803ec1782ab5452ddb5ca3d89c150dfc16686",
+    "skills/new/release-notes/SKILL.md": "b0234b6652902b63de900917505803ec1782ab5452ddb5ca3d89c150dfc16686"
+  },
+  "cases": [
+    {
+      "id": "open",
+      "prompt": "Прочитай задачи из MCP-трекера. Сохрани в answer.json JSON-массив идентификаторов всех открытых задач. Порядок не важен.",
+      "tracker": "tracker.json",
+      "skill": "open-tasks",
+      "source": "mcp_tracker_list",
+      "check": "exactIds"
+    },
+    {
+      "id": "owners",
+      "prompt": "Прочитай tasks.json и сохрани в answer.json JSON-объект: ключ — имя владельца, значение — число его задач во всех статусах.",
+      "local": [
+        "tasks.json",
+        "owners.json"
+      ],
+      "tracker": "tracker.json",
+      "skill": "owner-summary",
+      "source": "read_file",
+      "check": "check"
+    },
+    {
+      "id": "project",
+      "prompt": "Прочитай project.json и сохрани значение поля display_name в answer.json как одну JSON-строку.",
+      "local": [
+        "project.json",
+        "project.json"
+      ],
+      "tracker": "tracker.json",
+      "skill": null,
+      "source": "read_file",
+      "check": "check"
+    },
+    {
+      "id": "missing-owner",
+      "prompt": "Прочитай request.json. Нужно число задач одного владельца: если в заявке есть поле owner, возьми его имя, посчитай задачи в tasks.json и сохрани {\"count\":число} в answer.json. Если нужного поля нет, сохрани {\"missing\":\"имя отсутствующего поля\"} без догадок.",
+      "local": [
+        "request.json",
+        "request.json"
+      ],
+      "tracker": "tracker.json",
+      "skill": "owner-summary",
+      "source": "read_file",
+      "check": "check"
+    },
+    {
+      "id": "outage",
+      "prompt": "Получи открытые задачи из MCP-трекера. В answer.json сохрани {\"available\":true,\"ids\":[...]} при успехе. Если сервис вернул ошибку, сохрани только логический признак available со значением false.",
+      "tracker": "unavailable.json",
+      "skill": "open-tasks",
+      "source": "mcp_tracker_list",
+      "check": "check"
+    }
+  ],
+  "verification": {
+    "kind": "file_changed",
+    "path": "answer.json"
+  },
+  "runtime": "v22.19.0"
+}

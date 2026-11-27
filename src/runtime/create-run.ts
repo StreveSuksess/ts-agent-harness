@@ -1,13 +1,20 @@
+import { assertExtensionWorkspace, type ExtensionSnapshot } from '../extensions/index.js';
+import { taskTools } from './extension-tools.js';
+import type { Verification } from '../types.js';
 import { randomUUID } from 'node:crypto';
 import { Policy } from '../policy.js';
 import { snapshot } from '../journal.js';
-import { PROJECT_TOOLS, now } from '../types.js';
+import { now } from '../types.js';
 import { SYSTEM_PROMPT } from './prompts.js';
 import type { RuntimeContext } from './context.js';
 import type { CallRecord, Change, Limits, RunState } from '../types.js';
 import { renderPhaseMessage } from './task-state.js';
 
 export interface StartOptions {
+  sessionId?: string;
+  extensions?: ExtensionSnapshot;
+  verification?: Verification;
+  systemNote?: string;
   workspace: string;
   policyFile: string;
   prompt: string;
@@ -21,6 +28,7 @@ export function createRun(context: RuntimeContext, options: StartOptions): RunSt
   const policy = Policy.load(options.policyFile, options.workspace);
 
   context.store.assertOutside(policy.workspace);
+  if (options.extensions) assertExtensionWorkspace(options.extensions, policy.workspace);
 
   const initial = snapshot(policy);
   const limits = { ...policy.config.budgets, ...options.limits };
@@ -35,6 +43,8 @@ export function createRun(context: RuntimeContext, options: StartOptions): RunSt
   const run: RunState = {
     id: randomUUID(),
     revision: 0,
+    ...(options.sessionId ? { sessionId: options.sessionId } : {}),
+    ...(options.extensions ? { extensions: options.extensions } : {}),
     createdAt: now(),
     workspace: policy.workspace,
     policyFile: policy.file,
@@ -42,7 +52,9 @@ export function createRun(context: RuntimeContext, options: StartOptions): RunSt
     phase,
     status: 'running',
     prompt: options.prompt,
-    messages: [{ role: 'system', content: SYSTEM_PROMPT }],
+    messages: [
+      { role: 'system', content: [SYSTEM_PROMPT, options.systemNote].filter(Boolean).join('\n') },
+    ],
     pending: [],
     calls: Object.create(null) as Record<string, CallRecord>,
     tasks: [],
@@ -68,8 +80,12 @@ export function createRun(context: RuntimeContext, options: StartOptions): RunSt
         id: 'work',
         description: options.prompt,
         depends_on: [],
-        tools: [...PROJECT_TOOLS],
-        verification: { kind: 'bash', command: 'python3 -m unittest -v', exitCode: 0 },
+        tools: taskTools(run),
+        verification: options.verification ?? {
+          kind: 'bash',
+          command: 'python3 -m unittest -v',
+          exitCode: 0,
+        },
         status: 'running',
       },
     ];

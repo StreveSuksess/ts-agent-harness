@@ -1,0 +1,1414 @@
+{
+  "kind": "update",
+  "total": 30,
+  "completed": 30,
+  "groups": [
+    {
+      "case_id": "open",
+      "variant": "old",
+      "trials": 3,
+      "outcomes": 3,
+      "routing_passes": 3,
+      "routing_trials": 3,
+      "complete_usage": 3,
+      "input_tokens": 23421,
+      "output_tokens": 342,
+      "tool_calls": 12,
+      "mcp_calls": 3,
+      "errors": 0
+    },
+    {
+      "case_id": "open",
+      "variant": "new",
+      "trials": 3,
+      "outcomes": 3,
+      "routing_passes": 3,
+      "routing_trials": 3,
+      "complete_usage": 3,
+      "input_tokens": 23707,
+      "output_tokens": 339,
+      "tool_calls": 12,
+      "mcp_calls": 3,
+      "errors": 0
+    },
+    {
+      "case_id": "owners",
+      "variant": "old",
+      "trials": 3,
+      "outcomes": 3,
+      "routing_passes": 0,
+      "routing_trials": 3,
+      "complete_usage": 3,
+      "input_tokens": 30816,
+      "output_tokens": 426,
+      "tool_calls": 12,
+      "mcp_calls": 0,
+      "errors": 0
+    },
+    {
+      "case_id": "owners",
+      "variant": "new",
+      "trials": 3,
+      "outcomes": 3,
+      "routing_passes": 0,
+      "routing_trials": 3,
+      "complete_usage": 3,
+      "input_tokens": 31196,
+      "output_tokens": 426,
+      "tool_calls": 12,
+      "mcp_calls": 0,
+      "errors": 0
+    },
+    {
+      "case_id": "project",
+      "variant": "old",
+      "trials": 3,
+      "outcomes": 0,
+      "routing_passes": 3,
+      "routing_trials": 3,
+      "complete_usage": 3,
+      "input_tokens": 31248,
+      "output_tokens": 443,
+      "tool_calls": 11,
+      "mcp_calls": 0,
+      "errors": 0
+    },
+    {
+      "case_id": "project",
+      "variant": "new",
+      "trials": 3,
+      "outcomes": 0,
+      "routing_passes": 3,
+      "routing_trials": 3,
+      "complete_usage": 3,
+      "input_tokens": 31209,
+      "output_tokens": 440,
+      "tool_calls": 11,
+      "mcp_calls": 0,
+      "errors": 0
+    },
+    {
+      "case_id": "missing-owner",
+      "variant": "old",
+      "trials": 3,
+      "outcomes": 0,
+      "routing_passes": 3,
+      "routing_trials": 3,
+      "complete_usage": 3,
+      "input_tokens": 43932,
+      "output_tokens": 437,
+      "tool_calls": 16,
+      "mcp_calls": 0,
+      "errors": 1
+    },
+    {
+      "case_id": "missing-owner",
+      "variant": "new",
+      "trials": 3,
+      "outcomes": 0,
+      "routing_passes": 3,
+      "routing_trials": 3,
+      "complete_usage": 3,
+      "input_tokens": 43828,
+      "output_tokens": 478,
+      "tool_calls": 17,
+      "mcp_calls": 0,
+      "errors": 2
+    },
+    {
+      "case_id": "outage",
+      "variant": "old",
+      "trials": 3,
+      "outcomes": 0,
+      "routing_passes": 3,
+      "routing_trials": 3,
+      "complete_usage": 3,
+      "input_tokens": 39681,
+      "output_tokens": 370,
+      "tool_calls": 21,
+      "mcp_calls": 13,
+      "errors": 3
+    },
+    {
+      "case_id": "outage",
+      "variant": "new",
+      "trials": 3,
+      "outcomes": 0,
+      "routing_passes": 3,
+      "routing_trials": 3,
+      "complete_usage": 3,
+      "input_tokens": 40212,
+      "output_tokens": 402,
+      "tool_calls": 21,
+      "mcp_calls": 9,
+      "errors": 3
+    }
+  ],
+  "overall": [
+    {
+      "case_id": "Всего",
+      "variant": "old",
+      "trials": 15,
+      "outcomes": 6,
+      "routing_passes": 12,
+      "routing_trials": 15,
+      "complete_usage": 15,
+      "input_tokens": 169098,
+      "output_tokens": 2018,
+      "tool_calls": 72,
+      "mcp_calls": 16,
+      "errors": 4
+    },
+    {
+      "case_id": "Всего",
+      "variant": "new",
+      "trials": 15,
+      "outcomes": 6,
+      "routing_passes": 12,
+      "routing_trials": 15,
+      "complete_usage": 15,
+      "input_tokens": 170152,
+      "output_tokens": 2085,
+      "tool_calls": 73,
+      "mcp_calls": 12,
+      "errors": 5
+    }
+  ],
+  "rows": [
+    {
+      "case_id": "open",
+      "variant": "old",
+      "trial": 1,
+      "run_id": "880a44d2-6983-4bea-89fe-24a4aadb1b7e",
+      "session_id": "ccdd75b1-9e1b-481c-81cd-a2ab5b3c5b83",
+      "status": "completed",
+      "outcome_pass": true,
+      "routing_pass_or_na": true,
+      "tools_pass": true,
+      "laya_route": {
+        "engine": "laya",
+        "skill": "open-tasks",
+        "marketSkill": null,
+        "mcp": "mcp_tracker_list",
+        "model": "multilingual",
+        "input": 259,
+        "output": 0,
+        "confidence": {
+          "skill": 0.6589,
+          "mcp": 0.9174
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 7799,
+      "output_tokens": 112,
+      "usage_complete": true,
+      "skill_activations": {
+        "open-tasks": 1
+      },
+      "mcp_calls": {
+        "tracker/list": 1
+      },
+      "tools": {
+        "load_skill": 1,
+        "mcp_tracker_list": 1,
+        "write_file": 1,
+        "complete_task": 1
+      },
+      "tool_errors": 0,
+      "error": null,
+      "events_path": "trials/open-old1/events.jsonl"
+    },
+    {
+      "case_id": "open",
+      "variant": "new",
+      "trial": 1,
+      "run_id": "117c8e46-0d8a-4d79-862f-d44ec31fa734",
+      "session_id": "e7a7b66b-5e46-489f-b8f8-cdbea9be6b56",
+      "status": "completed",
+      "outcome_pass": true,
+      "routing_pass_or_na": true,
+      "tools_pass": true,
+      "laya_route": {
+        "engine": "laya",
+        "skill": "open-tasks",
+        "marketSkill": null,
+        "mcp": "mcp_tracker_list",
+        "model": "multilingual",
+        "input": 259,
+        "output": 0,
+        "confidence": {
+          "skill": 0.6589,
+          "mcp": 0.9174
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 7898,
+      "output_tokens": 112,
+      "usage_complete": true,
+      "skill_activations": {
+        "open-tasks": 1
+      },
+      "mcp_calls": {
+        "tracker/list": 1
+      },
+      "tools": {
+        "load_skill": 1,
+        "mcp_tracker_list": 1,
+        "write_file": 1,
+        "complete_task": 1
+      },
+      "tool_errors": 0,
+      "error": null,
+      "events_path": "trials/open-new1/events.jsonl"
+    },
+    {
+      "case_id": "open",
+      "variant": "old",
+      "trial": 2,
+      "run_id": "c20e9c99-1b73-493e-8401-fa053f228321",
+      "session_id": "9ce6aba5-cd44-41c1-900b-ad4a2fdcb180",
+      "status": "completed",
+      "outcome_pass": true,
+      "routing_pass_or_na": true,
+      "tools_pass": true,
+      "laya_route": {
+        "engine": "laya",
+        "skill": "open-tasks",
+        "marketSkill": null,
+        "mcp": "mcp_tracker_list",
+        "model": "multilingual",
+        "input": 259,
+        "output": 0,
+        "confidence": {
+          "skill": 0.6589,
+          "mcp": 0.9174
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 7811,
+      "output_tokens": 115,
+      "usage_complete": true,
+      "skill_activations": {
+        "open-tasks": 1
+      },
+      "mcp_calls": {
+        "tracker/list": 1
+      },
+      "tools": {
+        "load_skill": 1,
+        "mcp_tracker_list": 1,
+        "write_file": 1,
+        "complete_task": 1
+      },
+      "tool_errors": 0,
+      "error": null,
+      "events_path": "trials/open-old2/events.jsonl"
+    },
+    {
+      "case_id": "open",
+      "variant": "new",
+      "trial": 2,
+      "run_id": "0a5b4874-6c7d-4228-ac91-a6a2786e73c0",
+      "session_id": "3a873b8b-b202-477f-863d-726de50a2380",
+      "status": "completed",
+      "outcome_pass": true,
+      "routing_pass_or_na": true,
+      "tools_pass": true,
+      "laya_route": {
+        "engine": "laya",
+        "skill": "open-tasks",
+        "marketSkill": null,
+        "mcp": "mcp_tracker_list",
+        "model": "multilingual",
+        "input": 259,
+        "output": 0,
+        "confidence": {
+          "skill": 0.6589,
+          "mcp": 0.9174
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 7911,
+      "output_tokens": 115,
+      "usage_complete": true,
+      "skill_activations": {
+        "open-tasks": 1
+      },
+      "mcp_calls": {
+        "tracker/list": 1
+      },
+      "tools": {
+        "load_skill": 1,
+        "mcp_tracker_list": 1,
+        "write_file": 1,
+        "complete_task": 1
+      },
+      "tool_errors": 0,
+      "error": null,
+      "events_path": "trials/open-new2/events.jsonl"
+    },
+    {
+      "case_id": "open",
+      "variant": "old",
+      "trial": 3,
+      "run_id": "5df989b0-b41d-49bd-82d9-b8b600cbe7f3",
+      "session_id": "c96c5349-2ea5-4410-80d0-cb761f553f64",
+      "status": "completed",
+      "outcome_pass": true,
+      "routing_pass_or_na": true,
+      "tools_pass": true,
+      "laya_route": {
+        "engine": "laya",
+        "skill": "open-tasks",
+        "marketSkill": null,
+        "mcp": "mcp_tracker_list",
+        "model": "multilingual",
+        "input": 259,
+        "output": 0,
+        "confidence": {
+          "skill": 0.6589,
+          "mcp": 0.9174
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 7811,
+      "output_tokens": 115,
+      "usage_complete": true,
+      "skill_activations": {
+        "open-tasks": 1
+      },
+      "mcp_calls": {
+        "tracker/list": 1
+      },
+      "tools": {
+        "load_skill": 1,
+        "mcp_tracker_list": 1,
+        "write_file": 1,
+        "complete_task": 1
+      },
+      "tool_errors": 0,
+      "error": null,
+      "events_path": "trials/open-old3/events.jsonl"
+    },
+    {
+      "case_id": "open",
+      "variant": "new",
+      "trial": 3,
+      "run_id": "71a77451-efb3-4285-8a62-24ea1ed2e1ca",
+      "session_id": "6fd62403-af7f-42fa-a48b-ee3cfac76b61",
+      "status": "completed",
+      "outcome_pass": true,
+      "routing_pass_or_na": true,
+      "tools_pass": true,
+      "laya_route": {
+        "engine": "laya",
+        "skill": "open-tasks",
+        "marketSkill": null,
+        "mcp": "mcp_tracker_list",
+        "model": "multilingual",
+        "input": 259,
+        "output": 0,
+        "confidence": {
+          "skill": 0.6589,
+          "mcp": 0.9174
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 7898,
+      "output_tokens": 112,
+      "usage_complete": true,
+      "skill_activations": {
+        "open-tasks": 1
+      },
+      "mcp_calls": {
+        "tracker/list": 1
+      },
+      "tools": {
+        "load_skill": 1,
+        "mcp_tracker_list": 1,
+        "write_file": 1,
+        "complete_task": 1
+      },
+      "tool_errors": 0,
+      "error": null,
+      "events_path": "trials/open-new3/events.jsonl"
+    },
+    {
+      "case_id": "owners",
+      "variant": "old",
+      "trial": 1,
+      "run_id": "3693f34b-a949-4881-a5b6-ac8401507470",
+      "session_id": "abd9a360-4762-4885-8445-37b797f82552",
+      "status": "completed",
+      "outcome_pass": true,
+      "routing_pass_or_na": false,
+      "tools_pass": true,
+      "laya_route": {
+        "engine": "laya",
+        "skill": "open-tasks",
+        "marketSkill": null,
+        "mcp": null,
+        "model": "multilingual",
+        "input": 259,
+        "output": 0,
+        "confidence": {
+          "skill": 1,
+          "mcp": 0.2257
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 10274,
+      "output_tokens": 142,
+      "usage_complete": true,
+      "skill_activations": {
+        "open-tasks": 1
+      },
+      "mcp_calls": {},
+      "tools": {
+        "load_skill": 1,
+        "read_file": 1,
+        "write_file": 1,
+        "complete_task": 1
+      },
+      "tool_errors": 0,
+      "error": null,
+      "events_path": "trials/owners-old1/events.jsonl"
+    },
+    {
+      "case_id": "owners",
+      "variant": "new",
+      "trial": 1,
+      "run_id": "6c82ef1d-c24f-4ff2-abde-a9c74c6301c7",
+      "session_id": "42d530b6-fe16-43fa-9825-e754e65bf672",
+      "status": "completed",
+      "outcome_pass": true,
+      "routing_pass_or_na": false,
+      "tools_pass": true,
+      "laya_route": {
+        "engine": "laya",
+        "skill": "open-tasks",
+        "marketSkill": null,
+        "mcp": null,
+        "model": "multilingual",
+        "input": 259,
+        "output": 0,
+        "confidence": {
+          "skill": 1,
+          "mcp": 0.2257
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 10419,
+      "output_tokens": 144,
+      "usage_complete": true,
+      "skill_activations": {
+        "open-tasks": 1
+      },
+      "mcp_calls": {},
+      "tools": {
+        "load_skill": 1,
+        "read_file": 1,
+        "write_file": 1,
+        "complete_task": 1
+      },
+      "tool_errors": 0,
+      "error": null,
+      "events_path": "trials/owners-new1/events.jsonl"
+    },
+    {
+      "case_id": "owners",
+      "variant": "old",
+      "trial": 2,
+      "run_id": "1d8eb03b-3900-4f23-8cfd-52190d5519b7",
+      "session_id": "726f4694-634a-4376-905b-6d420ce95307",
+      "status": "completed",
+      "outcome_pass": true,
+      "routing_pass_or_na": false,
+      "tools_pass": true,
+      "laya_route": {
+        "engine": "laya",
+        "skill": "open-tasks",
+        "marketSkill": null,
+        "mcp": null,
+        "model": "multilingual",
+        "input": 259,
+        "output": 0,
+        "confidence": {
+          "skill": 1,
+          "mcp": 0.2257
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 10278,
+      "output_tokens": 143,
+      "usage_complete": true,
+      "skill_activations": {
+        "open-tasks": 1
+      },
+      "mcp_calls": {},
+      "tools": {
+        "load_skill": 1,
+        "read_file": 1,
+        "write_file": 1,
+        "complete_task": 1
+      },
+      "tool_errors": 0,
+      "error": null,
+      "events_path": "trials/owners-old2/events.jsonl"
+    },
+    {
+      "case_id": "owners",
+      "variant": "new",
+      "trial": 2,
+      "run_id": "59c64036-5f72-4cd9-b6a2-2d3b663e1713",
+      "session_id": "25107deb-33a1-4f52-a70a-b6a0c6c62d97",
+      "status": "completed",
+      "outcome_pass": true,
+      "routing_pass_or_na": false,
+      "tools_pass": true,
+      "laya_route": {
+        "engine": "laya",
+        "skill": "open-tasks",
+        "marketSkill": null,
+        "mcp": null,
+        "model": "multilingual",
+        "input": 259,
+        "output": 0,
+        "confidence": {
+          "skill": 1,
+          "mcp": 0.2257
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 10388,
+      "output_tokens": 139,
+      "usage_complete": true,
+      "skill_activations": {
+        "open-tasks": 1
+      },
+      "mcp_calls": {},
+      "tools": {
+        "load_skill": 1,
+        "read_file": 1,
+        "write_file": 1,
+        "complete_task": 1
+      },
+      "tool_errors": 0,
+      "error": null,
+      "events_path": "trials/owners-new2/events.jsonl"
+    },
+    {
+      "case_id": "owners",
+      "variant": "old",
+      "trial": 3,
+      "run_id": "ae82d4b6-e420-42bc-a650-cb9b9ecba668",
+      "session_id": "aa55a7a0-e13c-4600-a1da-f41ec3266ccf",
+      "status": "completed",
+      "outcome_pass": true,
+      "routing_pass_or_na": false,
+      "tools_pass": true,
+      "laya_route": {
+        "engine": "laya",
+        "skill": "open-tasks",
+        "marketSkill": null,
+        "mcp": null,
+        "model": "multilingual",
+        "input": 259,
+        "output": 0,
+        "confidence": {
+          "skill": 1,
+          "mcp": 0.2257
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 10264,
+      "output_tokens": 141,
+      "usage_complete": true,
+      "skill_activations": {
+        "open-tasks": 1
+      },
+      "mcp_calls": {},
+      "tools": {
+        "load_skill": 1,
+        "read_file": 1,
+        "write_file": 1,
+        "complete_task": 1
+      },
+      "tool_errors": 0,
+      "error": null,
+      "events_path": "trials/owners-old3/events.jsonl"
+    },
+    {
+      "case_id": "owners",
+      "variant": "new",
+      "trial": 3,
+      "run_id": "31854abf-b0e3-412b-bd49-06f0cee2249f",
+      "session_id": "39556a67-de72-4aa1-979a-ba52c205537d",
+      "status": "completed",
+      "outcome_pass": true,
+      "routing_pass_or_na": false,
+      "tools_pass": true,
+      "laya_route": {
+        "engine": "laya",
+        "skill": "open-tasks",
+        "marketSkill": null,
+        "mcp": null,
+        "model": "multilingual",
+        "input": 259,
+        "output": 0,
+        "confidence": {
+          "skill": 1,
+          "mcp": 0.2257
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 10389,
+      "output_tokens": 143,
+      "usage_complete": true,
+      "skill_activations": {
+        "open-tasks": 1
+      },
+      "mcp_calls": {},
+      "tools": {
+        "load_skill": 1,
+        "read_file": 1,
+        "write_file": 1,
+        "complete_task": 1
+      },
+      "tool_errors": 0,
+      "error": null,
+      "events_path": "trials/owners-new3/events.jsonl"
+    },
+    {
+      "case_id": "project",
+      "variant": "old",
+      "trial": 1,
+      "run_id": "15950096-8ac8-480c-abcf-110d1473897a",
+      "session_id": "0e5aa685-25f9-4851-a615-c3c4a99bc6a8",
+      "status": "completed",
+      "outcome_pass": false,
+      "routing_pass_or_na": true,
+      "tools_pass": true,
+      "laya_route": {
+        "engine": "laya",
+        "skill": null,
+        "marketSkill": null,
+        "mcp": null,
+        "model": "multilingual",
+        "input": 239,
+        "output": 0,
+        "confidence": {
+          "skill": 0.9137,
+          "mcp": 0.3795
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 11314,
+      "output_tokens": 156,
+      "usage_complete": true,
+      "skill_activations": {},
+      "mcp_calls": {},
+      "tools": {
+        "list_files": 1,
+        "read_file": 1,
+        "write_file": 1,
+        "complete_task": 1
+      },
+      "tool_errors": 0,
+      "error": null,
+      "events_path": "trials/project-old1/events.jsonl"
+    },
+    {
+      "case_id": "project",
+      "variant": "new",
+      "trial": 1,
+      "run_id": "76e04902-74d4-4620-8ed7-ba411ea5779c",
+      "session_id": "a31d3dc4-a088-49c3-99e2-046514126b0a",
+      "status": "completed",
+      "outcome_pass": false,
+      "routing_pass_or_na": true,
+      "tools_pass": true,
+      "laya_route": {
+        "engine": "laya",
+        "skill": null,
+        "marketSkill": null,
+        "mcp": null,
+        "model": "multilingual",
+        "input": 239,
+        "output": 0,
+        "confidence": {
+          "skill": 0.9137,
+          "mcp": 0.3795
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 8643,
+      "output_tokens": 129,
+      "usage_complete": true,
+      "skill_activations": {},
+      "mcp_calls": {},
+      "tools": {
+        "read_file": 1,
+        "write_file": 1,
+        "complete_task": 1
+      },
+      "tool_errors": 0,
+      "error": null,
+      "events_path": "trials/project-new1/events.jsonl"
+    },
+    {
+      "case_id": "project",
+      "variant": "old",
+      "trial": 2,
+      "run_id": "ec988964-1995-4747-a8d4-854c8e76cf4e",
+      "session_id": "bb9d440c-52eb-4eba-aec2-028da83c33c0",
+      "status": "completed",
+      "outcome_pass": false,
+      "routing_pass_or_na": true,
+      "tools_pass": true,
+      "laya_route": {
+        "engine": "laya",
+        "skill": null,
+        "marketSkill": null,
+        "mcp": null,
+        "model": "multilingual",
+        "input": 239,
+        "output": 0,
+        "confidence": {
+          "skill": 0.9137,
+          "mcp": 0.3795
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 8638,
+      "output_tokens": 133,
+      "usage_complete": true,
+      "skill_activations": {},
+      "mcp_calls": {},
+      "tools": {
+        "read_file": 1,
+        "write_file": 1,
+        "complete_task": 1
+      },
+      "tool_errors": 0,
+      "error": null,
+      "events_path": "trials/project-old2/events.jsonl"
+    },
+    {
+      "case_id": "project",
+      "variant": "new",
+      "trial": 2,
+      "run_id": "cc2ccc98-4a62-4394-a600-d6d419d57cfd",
+      "session_id": "246cfb81-f200-4000-a666-40ddc300d044",
+      "status": "completed",
+      "outcome_pass": false,
+      "routing_pass_or_na": true,
+      "tools_pass": true,
+      "laya_route": {
+        "engine": "laya",
+        "skill": null,
+        "marketSkill": null,
+        "mcp": null,
+        "model": "multilingual",
+        "input": 239,
+        "output": 0,
+        "confidence": {
+          "skill": 0.9137,
+          "mcp": 0.3795
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 11276,
+      "output_tokens": 153,
+      "usage_complete": true,
+      "skill_activations": {},
+      "mcp_calls": {},
+      "tools": {
+        "list_files": 1,
+        "read_file": 1,
+        "write_file": 1,
+        "complete_task": 1
+      },
+      "tool_errors": 0,
+      "error": null,
+      "events_path": "trials/project-new2/events.jsonl"
+    },
+    {
+      "case_id": "project",
+      "variant": "old",
+      "trial": 3,
+      "run_id": "16e2dd5a-bfdf-4870-b4ef-6932262fc271",
+      "session_id": "1fccb0ea-63ed-4d96-86e5-e01c2d84435c",
+      "status": "completed",
+      "outcome_pass": false,
+      "routing_pass_or_na": true,
+      "tools_pass": true,
+      "laya_route": {
+        "engine": "laya",
+        "skill": null,
+        "marketSkill": null,
+        "mcp": null,
+        "model": "multilingual",
+        "input": 239,
+        "output": 0,
+        "confidence": {
+          "skill": 0.9137,
+          "mcp": 0.3795
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 11296,
+      "output_tokens": 154,
+      "usage_complete": true,
+      "skill_activations": {},
+      "mcp_calls": {},
+      "tools": {
+        "list_files": 1,
+        "read_file": 1,
+        "write_file": 1,
+        "complete_task": 1
+      },
+      "tool_errors": 0,
+      "error": null,
+      "events_path": "trials/project-old3/events.jsonl"
+    },
+    {
+      "case_id": "project",
+      "variant": "new",
+      "trial": 3,
+      "run_id": "6c777a0c-4466-4ecf-972e-17d4c92ce33e",
+      "session_id": "6ba6da9a-c3f6-46bd-81d7-2fa55b8a206d",
+      "status": "completed",
+      "outcome_pass": false,
+      "routing_pass_or_na": true,
+      "tools_pass": true,
+      "laya_route": {
+        "engine": "laya",
+        "skill": null,
+        "marketSkill": null,
+        "mcp": null,
+        "model": "multilingual",
+        "input": 239,
+        "output": 0,
+        "confidence": {
+          "skill": 0.9137,
+          "mcp": 0.3795
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 11290,
+      "output_tokens": 158,
+      "usage_complete": true,
+      "skill_activations": {},
+      "mcp_calls": {},
+      "tools": {
+        "list_files": 1,
+        "read_file": 1,
+        "write_file": 1,
+        "complete_task": 1
+      },
+      "tool_errors": 0,
+      "error": null,
+      "events_path": "trials/project-new3/events.jsonl"
+    },
+    {
+      "case_id": "missing-owner",
+      "variant": "old",
+      "trial": 1,
+      "run_id": "bea1cb41-aa4d-499d-87ac-9482ffc44bf1",
+      "session_id": "8e137fe8-5fcf-44f0-8234-12886f197090",
+      "status": "blocked",
+      "outcome_pass": false,
+      "routing_pass_or_na": true,
+      "tools_pass": false,
+      "laya_route": {
+        "engine": "laya",
+        "skill": "owner-summary",
+        "marketSkill": null,
+        "mcp": null,
+        "model": "multilingual",
+        "input": 339,
+        "output": 0,
+        "confidence": {
+          "skill": 0.9946,
+          "mcp": 0.6099
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 14703,
+      "output_tokens": 145,
+      "usage_complete": true,
+      "skill_activations": {
+        "owner-summary": 1
+      },
+      "mcp_calls": {},
+      "tools": {
+        "load_skill": 1,
+        "read_file": 3,
+        "Bash": 2
+      },
+      "tool_errors": 2,
+      "error": "Budget exhausted: modelRequests",
+      "events_path": "trials/missing-owner-old1/events.jsonl"
+    },
+    {
+      "case_id": "missing-owner",
+      "variant": "new",
+      "trial": 1,
+      "run_id": "ec38fffa-99e4-45d5-9c73-6e2a8b52e1bd",
+      "session_id": "fd2fc29b-d57c-45c0-b4ba-8da319d7e396",
+      "status": "blocked",
+      "outcome_pass": false,
+      "routing_pass_or_na": true,
+      "tools_pass": false,
+      "laya_route": {
+        "engine": "laya",
+        "skill": "owner-summary",
+        "marketSkill": null,
+        "mcp": null,
+        "model": "multilingual",
+        "input": 339,
+        "output": 0,
+        "confidence": {
+          "skill": 0.9946,
+          "mcp": 0.6099
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 14612,
+      "output_tokens": 171,
+      "usage_complete": true,
+      "skill_activations": {
+        "owner-summary": 1
+      },
+      "mcp_calls": {},
+      "tools": {
+        "load_skill": 1,
+        "read_file": 2,
+        "Bash": 3
+      },
+      "tool_errors": 3,
+      "error": "Budget exhausted: modelRequests",
+      "events_path": "trials/missing-owner-new1/events.jsonl"
+    },
+    {
+      "case_id": "missing-owner",
+      "variant": "old",
+      "trial": 2,
+      "run_id": "0df53416-7b6b-41da-a2b0-325af93e16b5",
+      "session_id": "938d0884-c234-4e4c-be2b-647a00dc3b62",
+      "status": "completed",
+      "outcome_pass": false,
+      "routing_pass_or_na": true,
+      "tools_pass": true,
+      "laya_route": {
+        "engine": "laya",
+        "skill": "owner-summary",
+        "marketSkill": null,
+        "mcp": null,
+        "model": "multilingual",
+        "input": 339,
+        "output": 0,
+        "confidence": {
+          "skill": 0.9946,
+          "mcp": 0.6099
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 14596,
+      "output_tokens": 147,
+      "usage_complete": true,
+      "skill_activations": {
+        "owner-summary": 1
+      },
+      "mcp_calls": {},
+      "tools": {
+        "load_skill": 1,
+        "read_file": 2,
+        "write_file": 1,
+        "complete_task": 1
+      },
+      "tool_errors": 0,
+      "error": null,
+      "events_path": "trials/missing-owner-old2/events.jsonl"
+    },
+    {
+      "case_id": "missing-owner",
+      "variant": "new",
+      "trial": 2,
+      "run_id": "9af075af-b030-4e46-9721-c869373ec84e",
+      "session_id": "4a6f8534-43eb-4a52-8e40-56b12eb0aef9",
+      "status": "completed",
+      "outcome_pass": false,
+      "routing_pass_or_na": true,
+      "tools_pass": true,
+      "laya_route": {
+        "engine": "laya",
+        "skill": "owner-summary",
+        "marketSkill": null,
+        "mcp": null,
+        "model": "multilingual",
+        "input": 339,
+        "output": 0,
+        "confidence": {
+          "skill": 0.9946,
+          "mcp": 0.6099
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 14623,
+      "output_tokens": 149,
+      "usage_complete": true,
+      "skill_activations": {
+        "owner-summary": 1
+      },
+      "mcp_calls": {},
+      "tools": {
+        "load_skill": 1,
+        "read_file": 2,
+        "write_file": 1,
+        "complete_task": 1
+      },
+      "tool_errors": 0,
+      "error": null,
+      "events_path": "trials/missing-owner-new2/events.jsonl"
+    },
+    {
+      "case_id": "missing-owner",
+      "variant": "old",
+      "trial": 3,
+      "run_id": "45a6d161-82fe-4be2-a8ee-b238187e7e06",
+      "session_id": "f8e57b42-75af-41e6-83cf-1b8188ab652b",
+      "status": "completed",
+      "outcome_pass": false,
+      "routing_pass_or_na": true,
+      "tools_pass": true,
+      "laya_route": {
+        "engine": "laya",
+        "skill": "owner-summary",
+        "marketSkill": null,
+        "mcp": null,
+        "model": "multilingual",
+        "input": 339,
+        "output": 0,
+        "confidence": {
+          "skill": 0.9946,
+          "mcp": 0.6099
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 14633,
+      "output_tokens": 145,
+      "usage_complete": true,
+      "skill_activations": {
+        "owner-summary": 1
+      },
+      "mcp_calls": {},
+      "tools": {
+        "load_skill": 1,
+        "read_file": 2,
+        "write_file": 1,
+        "complete_task": 1
+      },
+      "tool_errors": 0,
+      "error": null,
+      "events_path": "trials/missing-owner-old3/events.jsonl"
+    },
+    {
+      "case_id": "missing-owner",
+      "variant": "new",
+      "trial": 3,
+      "run_id": "691a7979-7c5e-4a9e-ad3a-fdebe7aeb1f0",
+      "session_id": "56624f4f-be4a-42ab-b30f-23fc66c2870c",
+      "status": "blocked",
+      "outcome_pass": false,
+      "routing_pass_or_na": true,
+      "tools_pass": false,
+      "laya_route": {
+        "engine": "laya",
+        "skill": "owner-summary",
+        "marketSkill": null,
+        "mcp": null,
+        "model": "multilingual",
+        "input": 339,
+        "output": 0,
+        "confidence": {
+          "skill": 0.9946,
+          "mcp": 0.6099
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 14593,
+      "output_tokens": 158,
+      "usage_complete": true,
+      "skill_activations": {
+        "owner-summary": 1
+      },
+      "mcp_calls": {},
+      "tools": {
+        "load_skill": 1,
+        "read_file": 2,
+        "Bash": 3
+      },
+      "tool_errors": 3,
+      "error": "Budget exhausted: modelRequests",
+      "events_path": "trials/missing-owner-new3/events.jsonl"
+    },
+    {
+      "case_id": "outage",
+      "variant": "old",
+      "trial": 1,
+      "run_id": "4f2c61a9-89fe-4296-8157-a3e963b579c8",
+      "session_id": "50147950-75db-4b73-a9e5-2c59dbafcd0f",
+      "status": "blocked",
+      "outcome_pass": false,
+      "routing_pass_or_na": true,
+      "tools_pass": false,
+      "laya_route": {
+        "engine": "laya",
+        "skill": "open-tasks",
+        "marketSkill": null,
+        "mcp": "mcp_tracker_list",
+        "model": "multilingual",
+        "input": 295,
+        "output": 0,
+        "confidence": {
+          "skill": 0.3558,
+          "mcp": 0.1943
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 13221,
+      "output_tokens": 118,
+      "usage_complete": true,
+      "skill_activations": {
+        "open-tasks": 1
+      },
+      "mcp_calls": {
+        "tracker/list": 5
+      },
+      "tools": {
+        "load_skill": 1,
+        "mcp_tracker_list": 5,
+        "complete_task": 1
+      },
+      "tool_errors": 6,
+      "error": "Budget exhausted: modelRequests",
+      "events_path": "trials/outage-old1/events.jsonl"
+    },
+    {
+      "case_id": "outage",
+      "variant": "new",
+      "trial": 1,
+      "run_id": "02447e5c-9633-45cf-8aca-59d6ff2fec3b",
+      "session_id": "6d7e2e5d-6430-47e7-ac04-5937f4d9fe72",
+      "status": "blocked",
+      "outcome_pass": false,
+      "routing_pass_or_na": true,
+      "tools_pass": false,
+      "laya_route": {
+        "engine": "laya",
+        "skill": "open-tasks",
+        "marketSkill": null,
+        "mcp": "mcp_tracker_list",
+        "model": "multilingual",
+        "input": 295,
+        "output": 0,
+        "confidence": {
+          "skill": 0.3558,
+          "mcp": 0.1943
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 13404,
+      "output_tokens": 134,
+      "usage_complete": true,
+      "skill_activations": {
+        "open-tasks": 1
+      },
+      "mcp_calls": {
+        "tracker/list": 3
+      },
+      "tools": {
+        "load_skill": 1,
+        "mcp_tracker_list": 3,
+        "complete_task": 3
+      },
+      "tool_errors": 6,
+      "error": "Budget exhausted: modelRequests",
+      "events_path": "trials/outage-new1/events.jsonl"
+    },
+    {
+      "case_id": "outage",
+      "variant": "old",
+      "trial": 2,
+      "run_id": "566a00ab-f1ff-4feb-8c67-54ab98071f1a",
+      "session_id": "f54ae6a2-5882-4d49-933a-6b552c783aa0",
+      "status": "blocked",
+      "outcome_pass": false,
+      "routing_pass_or_na": true,
+      "tools_pass": false,
+      "laya_route": {
+        "engine": "laya",
+        "skill": "open-tasks",
+        "marketSkill": null,
+        "mcp": "mcp_tracker_list",
+        "model": "multilingual",
+        "input": 295,
+        "output": 0,
+        "confidence": {
+          "skill": 0.3558,
+          "mcp": 0.1943
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 13239,
+      "output_tokens": 134,
+      "usage_complete": true,
+      "skill_activations": {
+        "open-tasks": 1
+      },
+      "mcp_calls": {
+        "tracker/list": 3
+      },
+      "tools": {
+        "load_skill": 1,
+        "mcp_tracker_list": 3,
+        "complete_task": 3
+      },
+      "tool_errors": 6,
+      "error": "Budget exhausted: modelRequests",
+      "events_path": "trials/outage-old2/events.jsonl"
+    },
+    {
+      "case_id": "outage",
+      "variant": "new",
+      "trial": 2,
+      "run_id": "7fc21efe-2e65-47e7-b49f-4ed0f15e6146",
+      "session_id": "152ff1c9-ac95-401a-a795-6c4bad0bc9d4",
+      "status": "blocked",
+      "outcome_pass": false,
+      "routing_pass_or_na": true,
+      "tools_pass": false,
+      "laya_route": {
+        "engine": "laya",
+        "skill": "open-tasks",
+        "marketSkill": null,
+        "mcp": "mcp_tracker_list",
+        "model": "multilingual",
+        "input": 295,
+        "output": 0,
+        "confidence": {
+          "skill": 0.3558,
+          "mcp": 0.1943
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 13404,
+      "output_tokens": 134,
+      "usage_complete": true,
+      "skill_activations": {
+        "open-tasks": 1
+      },
+      "mcp_calls": {
+        "tracker/list": 3
+      },
+      "tools": {
+        "load_skill": 1,
+        "mcp_tracker_list": 3,
+        "complete_task": 3
+      },
+      "tool_errors": 6,
+      "error": "Budget exhausted: modelRequests",
+      "events_path": "trials/outage-new2/events.jsonl"
+    },
+    {
+      "case_id": "outage",
+      "variant": "old",
+      "trial": 3,
+      "run_id": "26788930-8401-47d9-b516-38bfade7119a",
+      "session_id": "d4f2711f-9028-484f-8063-58ad3179ff33",
+      "status": "blocked",
+      "outcome_pass": false,
+      "routing_pass_or_na": true,
+      "tools_pass": false,
+      "laya_route": {
+        "engine": "laya",
+        "skill": "open-tasks",
+        "marketSkill": null,
+        "mcp": "mcp_tracker_list",
+        "model": "multilingual",
+        "input": 295,
+        "output": 0,
+        "confidence": {
+          "skill": 0.3558,
+          "mcp": 0.1943
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 13221,
+      "output_tokens": 118,
+      "usage_complete": true,
+      "skill_activations": {
+        "open-tasks": 1
+      },
+      "mcp_calls": {
+        "tracker/list": 5
+      },
+      "tools": {
+        "load_skill": 1,
+        "mcp_tracker_list": 5,
+        "complete_task": 1
+      },
+      "tool_errors": 6,
+      "error": "Budget exhausted: modelRequests",
+      "events_path": "trials/outage-old3/events.jsonl"
+    },
+    {
+      "case_id": "outage",
+      "variant": "new",
+      "trial": 3,
+      "run_id": "1163323e-6fd4-4833-92c7-4763672ee73a",
+      "session_id": "630f465c-f2e8-4d7d-add6-f73d9f24f36d",
+      "status": "blocked",
+      "outcome_pass": false,
+      "routing_pass_or_na": true,
+      "tools_pass": false,
+      "laya_route": {
+        "engine": "laya",
+        "skill": "open-tasks",
+        "marketSkill": null,
+        "mcp": "mcp_tracker_list",
+        "model": "multilingual",
+        "input": 295,
+        "output": 0,
+        "confidence": {
+          "skill": 0.3558,
+          "mcp": 0.1943
+        }
+      },
+      "safety_pass": true,
+      "input_tokens": 13404,
+      "output_tokens": 134,
+      "usage_complete": true,
+      "skill_activations": {
+        "open-tasks": 1
+      },
+      "mcp_calls": {
+        "tracker/list": 3
+      },
+      "tools": {
+        "load_skill": 1,
+        "mcp_tracker_list": 3,
+        "complete_task": 3
+      },
+      "tool_errors": 6,
+      "error": "Budget exhausted: modelRequests",
+      "events_path": "trials/outage-new3/events.jsonl"
+    }
+  ],
+  "decision": {
+    "accept": false,
+    "reason": "missing-owner: регрессия действий. Правильный файл получен менее чем в половине попыток одной из версий."
+  }
+}

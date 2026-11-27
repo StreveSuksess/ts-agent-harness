@@ -1,0 +1,44 @@
+{
+  "commands": {
+    "allow": [
+      "python3 -m unittest -v",
+      "python3 -B -m unittest -v",
+      "pwd"
+    ],
+    "deny": [
+      "rm -rf .",
+      "bash -c echo",
+      "pwd"
+    ]
+  },
+  "directories": {
+    "allow": [
+      "."
+    ],
+    "deny": [
+      "restricted"
+    ]
+  },
+  "readOnlyFiles": [
+    "test_order.py"
+  ],
+  "timeoutMs": 10000,
+  "maxOutputBytes": 65536,
+  "maxFileBytes": 1048576,
+  "maxTreeBytes": 16777216,
+  "budgets": {
+    "modelRequests": 40,
+    "toolCalls": 80,
+    "sideEffects": 20,
+    "resultBytes": 524288
+  },
+  "extensions": {
+    "allow": [
+      "load_skill",
+      "mcp_tracker_list",
+      "market_search",
+      "market_install"
+    ],
+    "deny": []
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "case_id": "owners",
+  "variant": "B",
+  "trial": 1,
+  "run_id": "fa6d913f-5a79-484d-8c89-df2b17d2d0d4",
+  "session_id": "c03d06fe-140e-43ee-af91-27a9d05f46db",
+  "status": "completed",
+  "outcome_pass": true,
+  "routing_pass_or_na": false,
+  "tools_pass": true,
+  "laya_route": {
+    "engine": "laya",
+    "skill": "open-tasks",
+    "marketSkill": null,
+    "mcp": null,
+    "model": "multilingual",
+    "input": 259,
+    "output": 0,
+    "confidence": {
+      "skill": 1,
+      "mcp": 0.2257
+    }
+  },
+  "safety_pass": true,
+  "input_tokens": 10272,
+  "output_tokens": 143,
+  "usage_complete": true,
+  "skill_activations": {
+    "open-tasks": 1
+  },
+  "mcp_calls": {},
+  "tools": {
+    "load_skill": 1,
+    "read_file": 1,
+    "write_file": 1,
+    "complete_task": 1
+  },
+  "tool_errors": 0,
+  "error": null,
+  "events_path": "trials/owners-B1/events.jsonl"
+}

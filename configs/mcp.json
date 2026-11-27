@@ -1,0 +1,12 @@
+{
+  "servers": {
+    "tracker": {
+      "command": "node",
+      "entry": "mcp-server/tracker.mjs",
+      "args": [],
+      "allowRead": [],
+      "readOnlyTools": ["list"],
+      "timeoutMs": 4000
+    }
+  }
+}

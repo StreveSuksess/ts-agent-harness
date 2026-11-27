@@ -1,0 +1,112 @@
+{
+  "method": "deterministic-v1",
+  "doctorUsage": {
+    "input": 0,
+    "output": 0
+  },
+  "limits": "Стоимость отдельного инструмента в токенах неизвестна. Совпадение результатов не доказывает бесполезность вызова.",
+  "stats": {
+    "usage": {
+      "input": 16893,
+      "output": 210,
+      "complete": true
+    },
+    "byModel": {
+      "laya": {
+        "input": 774,
+        "output": 0,
+        "complete": true
+      },
+      "generator": {
+        "input": 16119,
+        "output": 210,
+        "complete": true
+      }
+    },
+    "modelRequests": 9,
+    "skills": {},
+    "tools": {
+      "mcp_tracker_list": 1,
+      "write_file": 2,
+      "complete_task": 2,
+      "read_file": 1
+    },
+    "mcp": {
+      "tracker/list": 1
+    },
+    "uniqueSkills": 0,
+    "uniqueTools": 4,
+    "errors": 0
+  },
+  "runs": [
+    {
+      "run_id": "6903ffbb-b505-4ce5-a845-a25a06768b02",
+      "stats": {
+        "usage": {
+          "input": 7032,
+          "output": 98,
+          "complete": true
+        },
+        "byModel": {
+          "laya": {
+            "input": 280,
+            "output": 0,
+            "complete": true
+          },
+          "generator": {
+            "input": 6752,
+            "output": 98,
+            "complete": true
+          }
+        },
+        "modelRequests": 4,
+        "skills": {},
+        "tools": {
+          "mcp_tracker_list": 1,
+          "write_file": 1,
+          "complete_task": 1
+        },
+        "mcp": {
+          "tracker/list": 1
+        },
+        "uniqueSkills": 0,
+        "uniqueTools": 3,
+        "errors": 0
+      }
+    },
+    {
+      "run_id": "d683eaa9-0511-457b-b9af-7a2f5ef5126e",
+      "stats": {
+        "usage": {
+          "input": 9861,
+          "output": 112,
+          "complete": true
+        },
+        "byModel": {
+          "laya": {
+            "input": 494,
+            "output": 0,
+            "complete": true
+          },
+          "generator": {
+            "input": 9367,
+            "output": 112,
+            "complete": true
+          }
+        },
+        "modelRequests": 5,
+        "skills": {},
+        "tools": {
+          "read_file": 1,
+          "write_file": 1,
+          "complete_task": 1
+        },
+        "mcp": {},
+        "uniqueSkills": 0,
+        "uniqueTools": 3,
+        "errors": 0
+      }
+    }
+  ],
+  "findings": []
+}

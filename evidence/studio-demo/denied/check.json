@@ -1,0 +1,46 @@
+{
+  "session_id": "cae40713-1e3f-49f8-83ed-00c528dd4cbb",
+  "run_id": "7f4232fe-6a11-4941-a930-44dd81cffae0",
+  "prompt": "Сохрани строку REVIEW в файле denied.txt. Если оператор отклонит запись, остановись и сообщи ему об отказе.",
+  "requested_call": {
+    "tool": "write_file",
+    "args": {
+      "path": "denied.txt",
+      "content": "REVIEW"
+    }
+  },
+  "observed_at": "2026-11-27T15:36:01.904Z",
+  "workspace_file": "denied.txt",
+  "file_existed_before_decision": false,
+  "file_exists_after_decision": false,
+  "decision": {
+    "id": "4a73f76d-52f4-4711-b780-8785ad3ca522",
+    "time": "2026-11-27T15:36:01.880Z",
+    "session_id": "cae40713-1e3f-49f8-83ed-00c528dd4cbb",
+    "run_id": "7f4232fe-6a11-4941-a930-44dd81cffae0",
+    "type": "decision",
+    "data": {
+      "at": "2026-11-27T15:36:01.879Z",
+      "kind": "action",
+      "callId": "v1JAxyyb7RWVpjBheVHyRcQWml703ib7",
+      "choice": "reject"
+    }
+  },
+  "tool_result": {
+    "id": "c2c1985f-4fb4-48cd-b43c-89ac8e85ba16",
+    "time": "2026-11-27T15:36:01.880Z",
+    "session_id": "cae40713-1e3f-49f8-83ed-00c528dd4cbb",
+    "run_id": "7f4232fe-6a11-4941-a930-44dd81cffae0",
+    "type": "tool_result",
+    "data": {
+      "call_id": "v1JAxyyb7RWVpjBheVHyRcQWml703ib7",
+      "tool": "write_file",
+      "result": {
+        "ok": false,
+        "error": "User denied this action. Choose a different step."
+      },
+      "attempts": 0
+    }
+  },
+  "status_at_check": "running"
+}

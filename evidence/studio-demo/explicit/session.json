@@ -1,0 +1,50 @@
+{
+  "session_id": "ff720af5-8123-4979-b939-cab780127e03",
+  "turns": [
+    {
+      "id": "6903ffbb-b505-4ce5-a845-a25a06768b02",
+      "prompt": "Прочитай задачи из MCP-трекера. Сохрани в answer.json JSON-массив идентификаторов всех открытых задач. Порядок не важен.",
+      "final": "[\"T1\", \"T3\"]",
+      "status": "completed"
+    },
+    {
+      "id": "d683eaa9-0511-457b-b9af-7a2f5ef5126e",
+      "prompt": "Прочитай созданный тобой answer.json. Сколько в нём идентификаторов открытых задач? Сохрани их количество в count.txt, только число.",
+      "final": "2",
+      "status": "completed"
+    }
+  ],
+  "stats": {
+    "usage": {
+      "input": 16893,
+      "output": 210,
+      "complete": true
+    },
+    "byModel": {
+      "laya": {
+        "input": 774,
+        "output": 0,
+        "complete": true
+      },
+      "generator": {
+        "input": 16119,
+        "output": 210,
+        "complete": true
+      }
+    },
+    "modelRequests": 9,
+    "skills": {},
+    "tools": {
+      "mcp_tracker_list": 1,
+      "write_file": 2,
+      "complete_task": 2,
+      "read_file": 1
+    },
+    "mcp": {
+      "tracker/list": 1
+    },
+    "uniqueSkills": 0,
+    "uniqueTools": 4,
+    "errors": 0
+  }
+}

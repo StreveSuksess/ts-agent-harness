@@ -14,10 +14,13 @@
     "agent": "./agent",
     "demo": "npm run agent -- demo",
     "format": "prettier --write src",
-    "format:check": "prettier --check src"
+    "format:check": "prettier --check src",
+    "ui": "npm run build --silent && node --env-file-if-exists=.env dist/src/web/server.js",
+    "eval": "npm run build --silent && node --env-file-if-exists=.env dist/src/evals/cli.js"
   },
   "dependencies": {
-    "ajv": "8.18.0"
+    "ajv": "8.18.0",
+    "yaml": "2.9.1"
   },
   "devDependencies": {
     "@types/node": "22.20.5",

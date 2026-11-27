@@ -1,0 +1,51 @@
+{
+  "session_id": "19194820-ea0a-43ca-8c85-a1f2fecff6ed",
+  "turns": [
+    {
+      "id": "6233c32a-9423-4017-ac05-640e634955ff",
+      "prompt": "Прочитай задачи трекера и сохрани ID всех открытых задач в open.json как JSON-массив строк.",
+      "final": "[]",
+      "status": "completed"
+    },
+    {
+      "id": "f4ac4ac6-335c-415c-94dc-4dd19c8404eb",
+      "prompt": "По тому же списку открытых задач запиши их количество в count.txt, только число.",
+      "final": "0",
+      "status": "completed"
+    }
+  ],
+  "stats": {
+    "usage": {
+      "input": 26484,
+      "output": 269,
+      "complete": true
+    },
+    "byModel": {
+      "laya": {
+        "input": 688,
+        "output": 0,
+        "complete": true
+      },
+      "generator": {
+        "input": 25796,
+        "output": 269,
+        "complete": true
+      }
+    },
+    "modelRequests": 12,
+    "skills": {
+      "open-tasks": 2
+    },
+    "tools": {
+      "load_skill": 2,
+      "list_files": 2,
+      "read_file": 2,
+      "write_file": 2,
+      "complete_task": 2
+    },
+    "mcp": {},
+    "uniqueSkills": 1,
+    "uniqueTools": 5,
+    "errors": 0
+  }
+}

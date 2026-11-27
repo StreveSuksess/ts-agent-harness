@@ -17,6 +17,7 @@ export interface Message {
 
 export interface AssistantMessage extends Message {
   role: 'assistant';
+  usage?: { input: number | null; output: number | null };
 }
 
 export interface ToolDefinition {

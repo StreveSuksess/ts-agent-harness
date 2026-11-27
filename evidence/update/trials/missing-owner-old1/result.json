@@ -1,0 +1,40 @@
+{
+  "case_id": "missing-owner",
+  "variant": "old",
+  "trial": 1,
+  "run_id": "bea1cb41-aa4d-499d-87ac-9482ffc44bf1",
+  "session_id": "8e137fe8-5fcf-44f0-8234-12886f197090",
+  "status": "blocked",
+  "outcome_pass": false,
+  "routing_pass_or_na": true,
+  "tools_pass": false,
+  "laya_route": {
+    "engine": "laya",
+    "skill": "owner-summary",
+    "marketSkill": null,
+    "mcp": null,
+    "model": "multilingual",
+    "input": 339,
+    "output": 0,
+    "confidence": {
+      "skill": 0.9946,
+      "mcp": 0.6099
+    }
+  },
+  "safety_pass": true,
+  "input_tokens": 14703,
+  "output_tokens": 145,
+  "usage_complete": true,
+  "skill_activations": {
+    "owner-summary": 1
+  },
+  "mcp_calls": {},
+  "tools": {
+    "load_skill": 1,
+    "read_file": 3,
+    "Bash": 2
+  },
+  "tool_errors": 2,
+  "error": "Budget exhausted: modelRequests",
+  "events_path": "trials/missing-owner-old1/events.jsonl"
+}

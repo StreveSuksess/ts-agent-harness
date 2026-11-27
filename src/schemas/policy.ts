@@ -13,6 +13,7 @@ const budget = object(
 
 const policySchema = object(
   {
+    extensions: object({ allow: strings, deny: strings }, ['allow', 'deny']),
     commands: object({ allow: strings, deny: strings }, ['allow', 'deny']),
     directories: object({ allow: { ...strings, minItems: 1 }, deny: strings }, ['allow', 'deny']),
     readOnlyFiles: strings,

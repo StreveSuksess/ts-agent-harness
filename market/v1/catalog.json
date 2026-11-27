@@ -1,0 +1,16 @@
+[
+  {
+    "name": "handoff-note",
+    "description": "Prepare a shift handover from tracker items including owners, blockers and next actions.",
+    "version": "1.0.0",
+    "hash": "36a4e49ca4e5b0954aff5fc10678b62b8bd97e13927593f2923c212e5e7245ed",
+    "path": "handoff-note/SKILL.md"
+  },
+  {
+    "name": "open-tasks",
+    "description": "Select open tracker tasks and produce a list of their IDs. Use for an open-task list, backlog or explicitly requested open items.",
+    "version": "1.0.0",
+    "hash": "91d4ae16062e44dadc8db83513dac92281f0d683acd0793cd470d034f59e3a1f",
+    "path": "open-tasks/SKILL.md"
+  }
+]

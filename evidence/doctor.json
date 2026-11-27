@@ -1,0 +1,84 @@
+{
+  "trace": "ab/trials/owners-A3/events.jsonl",
+  "method": "deterministic-v1",
+  "doctorUsage": {
+    "input": 0,
+    "output": 0
+  },
+  "limits": "Стоимость отдельного инструмента в токенах неизвестна. Совпадение результатов не доказывает бесполезность вызова.",
+  "stats": {
+    "usage": {
+      "input": 6419,
+      "output": 117,
+      "complete": true
+    },
+    "byModel": {
+      "laya": {
+        "input": 103,
+        "output": 0,
+        "complete": true
+      },
+      "generator": {
+        "input": 6316,
+        "output": 117,
+        "complete": true
+      }
+    },
+    "modelRequests": 4,
+    "skills": {},
+    "tools": {
+      "read_file": 1,
+      "write_file": 1
+    },
+    "mcp": {},
+    "uniqueSkills": 0,
+    "uniqueTools": 2,
+    "errors": 0
+  },
+  "runs": [
+    {
+      "run_id": "3647f72c-9c75-47c7-b223-0c3e38eea424",
+      "stats": {
+        "usage": {
+          "input": 6419,
+          "output": 117,
+          "complete": true
+        },
+        "byModel": {
+          "laya": {
+            "input": 103,
+            "output": 0,
+            "complete": true
+          },
+          "generator": {
+            "input": 6316,
+            "output": 117,
+            "complete": true
+          }
+        },
+        "modelRequests": 4,
+        "skills": {},
+        "tools": {
+          "read_file": 1,
+          "write_file": 1
+        },
+        "mcp": {},
+        "uniqueSkills": 0,
+        "uniqueTools": 2,
+        "errors": 0
+      }
+    }
+  ],
+  "findings": [
+    {
+      "kind": "missing_evidence",
+      "run_id": "3647f72c-9c75-47c7-b223-0c3e38eea424",
+      "event_ids": [
+        "2f05cdfc-f221-4d8e-99af-20bde165f520"
+      ],
+      "count": 1,
+      "interpretation": "Агент закончил ответ до подтверждения результата задачи.",
+      "suggestion": "В инструкции шага укажите проверяемый файл или команду и завершите задачу через complete_task."
+    }
+  ]
+}

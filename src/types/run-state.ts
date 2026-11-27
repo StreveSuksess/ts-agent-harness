@@ -1,3 +1,6 @@
+import type { ExtensionSnapshot } from '../extensions/index.js';
+import type { LayaRoute } from '../studio/laya.js';
+import type { AgentEvent } from '../studio/events.js';
 import type { Message, ToolCall, ToolResult } from './protocol.js';
 import type { Plan, Task } from './plan.js';
 
@@ -9,6 +12,7 @@ export interface Limits {
 }
 
 export interface PolicyConfig {
+  extensions?: { allow: string[]; deny: string[] };
   commands: { allow: string[]; deny: string[] };
   directories: { allow: string[]; deny: string[] };
   readOnlyFiles: string[];
@@ -75,6 +79,11 @@ export type RunStatus =
   | 'rolled_back';
 
 export interface RunState {
+  sessionId?: string;
+  extensions?: ExtensionSnapshot;
+  routing?: LayaRoute;
+  events?: AgentEvent[];
+  auditCursor?: { messages: number; decisions: number; status: string };
   id: string;
   revision: number;
   createdAt: string;

@@ -1,5 +1,9 @@
 import type { AssistantMessage, Message, Model, ToolDefinition } from './types.js';
 
+export function tokenCount(value: unknown): number | null {
+  return typeof value === 'number' && Number.isSafeInteger(value) && value >= 0 ? value : null;
+}
+
 export function parseAssistant(value: unknown): AssistantMessage {
   if (!value || typeof value !== 'object') {
     throw new Error('Invalid assistant response');
@@ -64,8 +68,15 @@ export class ChatModel implements Model {
   private readonly model: string;
 
   private readonly timeoutMs: number;
+  private readonly generation: { temperature?: number; max_tokens?: number };
 
-  constructor(options: { baseUrl: string; apiKey: string; model: string; timeoutMs?: number }) {
+  constructor(options: {
+    baseUrl: string;
+    apiKey: string;
+    model: string;
+    timeoutMs?: number;
+    generation?: { temperature?: number; max_tokens?: number };
+  }) {
     const url = new URL(options.baseUrl);
 
     if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password) {
@@ -73,6 +84,7 @@ export class ChatModel implements Model {
     }
 
     this.baseUrl = options.baseUrl.replace(/\/+$/, '');
+    this.generation = options.generation ?? {};
     this.key = options.apiKey;
     this.model = options.model;
     this.timeoutMs = options.timeoutMs ?? 120000;
@@ -83,6 +95,7 @@ export class ChatModel implements Model {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${this.key}` },
       body: JSON.stringify({
+        ...this.generation,
         model: this.model,
         messages,
         tools,
@@ -124,9 +137,16 @@ export class ChatModel implements Model {
 
     const responseBody = JSON.parse(Buffer.concat(chunks).toString('utf8')) as {
       choices?: { message?: unknown }[];
+      usage?: { prompt_tokens?: number; completion_tokens?: number };
     };
 
-    return parseAssistant(responseBody.choices?.[0]?.message);
+    const message = parseAssistant(responseBody.choices?.[0]?.message);
+    if (responseBody.usage)
+      message.usage = {
+        input: tokenCount(responseBody.usage.prompt_tokens),
+        output: tokenCount(responseBody.usage.completion_tokens),
+      };
+    return message;
   }
 
   static fromEnvironment(): ChatModel {

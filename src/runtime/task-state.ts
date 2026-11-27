@@ -1,6 +1,6 @@
 import type { RuntimeContext } from './context.js';
 import type { RunState } from '../types.js';
-import { PROJECT_TOOLS } from '../types.js';
+import { evidenceTool } from './extension-tools.js';
 
 export function selectNextTask(run: RunState): void {
   const ready = run.tasks.find(
@@ -20,6 +20,8 @@ export function selectNextTask(run: RunState): void {
 
 export function renderPhaseMessage(run: RunState): string {
   if (run.phase === 'plan') {
+    if (run.extensions)
+      return 'Phase: PLAN. Use allowed read-only sources, then submit_plan for human approval. Use exact declared names. No changes or Bash before approval.';
     return 'Phase: PLAN. Inspect with list_files/read_file, then submit_plan as a standalone tool call. Bash and mutations are forbidden.';
   }
 
@@ -36,7 +38,7 @@ export function renderPhaseMessage(run: RunState): string {
         record.taskId === task.id &&
         record.status === 'completed' &&
         record.result?.ok &&
-        PROJECT_TOOLS.has(record.call.function.name),
+        evidenceTool(run, record.call.function.name),
     )
     .slice(-8)
     .map((record) => ({

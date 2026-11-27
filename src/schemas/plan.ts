@@ -1,55 +1,58 @@
 import type { Plan } from '../types.js';
 import { ajv, object, str, strings } from './common.js';
 
-const verification = {
-  oneOf: [
-    object(
-      {
-        kind: { const: 'tool' },
-        tool: { enum: ['read_file', 'list_files', 'write_file', 'delete_file', 'Bash'] },
-      },
-      ['kind', 'tool'],
-    ),
-    object({ kind: { const: 'file_changed' }, path: str }, ['kind', 'path']),
-    object({ kind: { const: 'bash' }, command: str, exitCode: { type: 'integer' } }, [
-      'kind',
-      'command',
-      'exitCode',
-    ]),
-  ],
-};
-
-export const planSchema = object(
-  {
-    goal: str,
-    steps: {
-      type: 'array',
-      minItems: 1,
-      maxItems: 30,
-      items: object(
+const baseTools = ['read_file', 'list_files', 'write_file', 'delete_file', 'Bash'];
+export function makePlanSchema(names: string[] = baseTools) {
+  const verification = {
+    oneOf: [
+      object(
         {
-          id: { type: 'string', pattern: '^[a-zA-Z0-9_-]{1,64}$' },
-          description: str,
-          depends_on: strings,
-          tools: {
-            type: 'array',
-            minItems: 1,
-            items: { enum: ['read_file', 'list_files', 'write_file', 'delete_file', 'Bash'] },
-          },
-          verification,
+          kind: { const: 'tool' },
+          tool: { enum: names.filter((name) => name !== 'market_install') },
         },
-        ['id', 'description', 'depends_on', 'tools', 'verification'],
+        ['kind', 'tool'],
       ),
-    },
-    risks: strings,
-    assumptions: strings,
-    done_when: str,
-  },
-  ['goal', 'steps', 'risks', 'assumptions', 'done_when'],
-);
+      object({ kind: { const: 'file_changed' }, path: str }, ['kind', 'path']),
+      object({ kind: { const: 'bash' }, command: str, exitCode: { type: 'integer' } }, [
+        'kind',
+        'command',
+        'exitCode',
+      ]),
+    ],
+  };
 
-export function validatePlan(value: unknown): Plan {
-  const check = ajv.compile<Plan>(planSchema);
+  return object(
+    {
+      goal: str,
+      steps: {
+        type: 'array',
+        minItems: 1,
+        maxItems: 30,
+        items: object(
+          {
+            id: { type: 'string', pattern: '^[a-zA-Z0-9_-]{1,64}$' },
+            description: str,
+            depends_on: strings,
+            tools: {
+              type: 'array',
+              minItems: 1,
+              items: { enum: names },
+            },
+            verification,
+          },
+          ['id', 'description', 'depends_on', 'tools', 'verification'],
+        ),
+      },
+      risks: strings,
+      assumptions: strings,
+      done_when: str,
+    },
+    ['goal', 'steps', 'risks', 'assumptions', 'done_when'],
+  );
+}
+export const planSchema = makePlanSchema();
+export function validatePlan(value: unknown, names?: string[]): Plan {
+  const check = ajv.compile<Plan>(names ? makePlanSchema(names) : planSchema);
 
   if (!check(value)) {
     throw new Error(`Invalid plan: ${ajv.errorsText(check.errors)}`);

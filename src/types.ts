@@ -30,7 +30,7 @@ export type FaultHook = (
   point: 'after_reservation' | 'after_execute' | 'after_rollback_write',
 ) => void;
 
-export const SIDE_EFFECTS = new Set(['write_file', 'delete_file', 'Bash']);
+export const SIDE_EFFECTS = new Set(['write_file', 'delete_file', 'Bash', 'market_install']);
 
 export const PROJECT_TOOLS = new Set([
   'list_files',

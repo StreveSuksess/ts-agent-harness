@@ -1,0 +1,42 @@
+{
+  "case_id": "outage",
+  "variant": "new",
+  "trial": 3,
+  "run_id": "1163323e-6fd4-4833-92c7-4763672ee73a",
+  "session_id": "630f465c-f2e8-4d7d-add6-f73d9f24f36d",
+  "status": "blocked",
+  "outcome_pass": false,
+  "routing_pass_or_na": true,
+  "tools_pass": false,
+  "laya_route": {
+    "engine": "laya",
+    "skill": "open-tasks",
+    "marketSkill": null,
+    "mcp": "mcp_tracker_list",
+    "model": "multilingual",
+    "input": 295,
+    "output": 0,
+    "confidence": {
+      "skill": 0.3558,
+      "mcp": 0.1943
+    }
+  },
+  "safety_pass": true,
+  "input_tokens": 13404,
+  "output_tokens": 134,
+  "usage_complete": true,
+  "skill_activations": {
+    "open-tasks": 1
+  },
+  "mcp_calls": {
+    "tracker/list": 3
+  },
+  "tools": {
+    "load_skill": 1,
+    "mcp_tracker_list": 3,
+    "complete_task": 3
+  },
+  "tool_errors": 6,
+  "error": "Budget exhausted: modelRequests",
+  "events_path": "trials/outage-new3/events.jsonl"
+}

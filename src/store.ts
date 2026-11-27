@@ -1,3 +1,4 @@
+import { captureEvents } from './studio/events.js';
 import { DatabaseSync } from 'node:sqlite';
 import {
   mkdirSync,
@@ -92,6 +93,7 @@ export class Store {
       }
 
       const nextRevision = run.revision + 1;
+      captureEvents(run);
       const serializedState = JSON.stringify({ ...run, revision: nextRevision });
 
       this.db

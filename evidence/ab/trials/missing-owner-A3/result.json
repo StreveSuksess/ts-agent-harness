@@ -1,0 +1,35 @@
+{
+  "case_id": "missing-owner",
+  "variant": "A",
+  "trial": 3,
+  "run_id": "25ea412e-a602-4890-8632-29682be957bd",
+  "session_id": "be3fe264-1038-434a-bd38-9df49898493e",
+  "status": "failed",
+  "outcome_pass": false,
+  "routing_pass_or_na": "n/a",
+  "tools_pass": false,
+  "laya_route": {
+    "engine": "laya",
+    "skill": null,
+    "marketSkill": null,
+    "mcp": null,
+    "model": "multilingual",
+    "input": 143,
+    "output": 0,
+    "confidence": {
+      "mcp": 0.6099
+    }
+  },
+  "safety_pass": true,
+  "input_tokens": 9915,
+  "output_tokens": 97,
+  "usage_complete": true,
+  "skill_activations": {},
+  "mcp_calls": {},
+  "tools": {
+    "read_file": 3
+  },
+  "tool_errors": 0,
+  "error": "Model ended without approved plan/completed task evidence",
+  "events_path": "trials/missing-owner-A3/events.jsonl"
+}

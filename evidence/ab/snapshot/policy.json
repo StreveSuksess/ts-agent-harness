@@ -1,0 +1,11 @@
+{
+  "commands":{"allow":[],"deny":["pwd"]},
+  "directories":{"allow":["."],"deny":["restricted"]},
+  "readOnlyFiles":["tasks.json","project.json","request.json"],
+  "timeoutMs":5000,
+  "maxOutputBytes":16384,
+  "maxFileBytes":65536,
+  "maxTreeBytes":1048576,
+  "budgets":{"modelRequests":6,"toolCalls":12,"sideEffects":3,"resultBytes":98304},
+  "extensions":{"allow":["load_skill","mcp_tracker_list"],"deny":[]}
+}

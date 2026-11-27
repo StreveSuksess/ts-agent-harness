@@ -1,0 +1,119 @@
+{
+  "method": "deterministic-v1",
+  "doctorUsage": {
+    "input": 0,
+    "output": 0
+  },
+  "limits": "Стоимость отдельного инструмента в токенах неизвестна. Совпадение результатов не доказывает бесполезность вызова.",
+  "stats": {
+    "usage": {
+      "input": 26484,
+      "output": 269,
+      "complete": true
+    },
+    "byModel": {
+      "laya": {
+        "input": 688,
+        "output": 0,
+        "complete": true
+      },
+      "generator": {
+        "input": 25796,
+        "output": 269,
+        "complete": true
+      }
+    },
+    "modelRequests": 12,
+    "skills": {
+      "open-tasks": 2
+    },
+    "tools": {
+      "load_skill": 2,
+      "list_files": 2,
+      "read_file": 2,
+      "write_file": 2,
+      "complete_task": 2
+    },
+    "mcp": {},
+    "uniqueSkills": 1,
+    "uniqueTools": 5,
+    "errors": 0
+  },
+  "runs": [
+    {
+      "run_id": "6233c32a-9423-4017-ac05-640e634955ff",
+      "stats": {
+        "usage": {
+          "input": 13043,
+          "output": 134,
+          "complete": true
+        },
+        "byModel": {
+          "laya": {
+            "input": 262,
+            "output": 0,
+            "complete": true
+          },
+          "generator": {
+            "input": 12781,
+            "output": 134,
+            "complete": true
+          }
+        },
+        "modelRequests": 6,
+        "skills": {
+          "open-tasks": 1
+        },
+        "tools": {
+          "load_skill": 1,
+          "list_files": 1,
+          "read_file": 1,
+          "write_file": 1,
+          "complete_task": 1
+        },
+        "mcp": {},
+        "uniqueSkills": 1,
+        "uniqueTools": 5,
+        "errors": 0
+      }
+    },
+    {
+      "run_id": "f4ac4ac6-335c-415c-94dc-4dd19c8404eb",
+      "stats": {
+        "usage": {
+          "input": 13441,
+          "output": 135,
+          "complete": true
+        },
+        "byModel": {
+          "laya": {
+            "input": 426,
+            "output": 0,
+            "complete": true
+          },
+          "generator": {
+            "input": 13015,
+            "output": 135,
+            "complete": true
+          }
+        },
+        "modelRequests": 6,
+        "skills": {
+          "open-tasks": 1
+        },
+        "tools": {
+          "load_skill": 1,
+          "list_files": 1,
+          "read_file": 1,
+          "write_file": 1,
+          "complete_task": 1
+        },
+        "mcp": {},
+        "uniqueSkills": 1,
+        "uniqueTools": 5,
+        "errors": 0
+      }
+    }
+  ],
+  "findings": []
+}

@@ -1,0 +1,43 @@
+{
+  "case_id": "open",
+  "variant": "old",
+  "trial": 1,
+  "run_id": "880a44d2-6983-4bea-89fe-24a4aadb1b7e",
+  "session_id": "ccdd75b1-9e1b-481c-81cd-a2ab5b3c5b83",
+  "status": "completed",
+  "outcome_pass": true,
+  "routing_pass_or_na": true,
+  "tools_pass": true,
+  "laya_route": {
+    "engine": "laya",
+    "skill": "open-tasks",
+    "marketSkill": null,
+    "mcp": "mcp_tracker_list",
+    "model": "multilingual",
+    "input": 259,
+    "output": 0,
+    "confidence": {
+      "skill": 0.6589,
+      "mcp": 0.9174
+    }
+  },
+  "safety_pass": true,
+  "input_tokens": 7799,
+  "output_tokens": 112,
+  "usage_complete": true,
+  "skill_activations": {
+    "open-tasks": 1
+  },
+  "mcp_calls": {
+    "tracker/list": 1
+  },
+  "tools": {
+    "load_skill": 1,
+    "mcp_tracker_list": 1,
+    "write_file": 1,
+    "complete_task": 1
+  },
+  "tool_errors": 0,
+  "error": null,
+  "events_path": "trials/open-old1/events.jsonl"
+}

@@ -19,3 +19,5 @@ jobs:
       - run: npm run check
       - run: npm test
       - run: npm run demo
+      - run: node dist/src/evals/cli.js verify ab
+      - run: node dist/src/evals/cli.js verify update

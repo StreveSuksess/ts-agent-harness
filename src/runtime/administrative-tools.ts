@@ -1,7 +1,8 @@
+import { evidenceTool, taskTools } from './extension-tools.js';
 import { Policy } from '../policy.js';
 import { validateArguments, validatePlan } from '../schema.js';
 import { assertTree, snapshot, treeDiff } from '../journal.js';
-import { PROJECT_TOOLS, now } from '../types.js';
+import { now } from '../types.js';
 import type { Args, Pending, RunState, ToolResult } from '../types.js';
 import { selectNextTask } from './task-state.js';
 
@@ -16,7 +17,7 @@ export function executeAdministrativeCall(
       throw new Error('Plan submission is only available in Plan Mode');
     }
 
-    const plan = validatePlan(args.plan);
+    const plan = validatePlan(args.plan, run.extensions ? taskTools(run, policy) : undefined);
 
     for (const step of plan.steps) {
       if (step.verification.kind === 'file_changed') {
@@ -45,7 +46,7 @@ export function executeAdministrativeCall(
       evidence.taskId !== task.id ||
       evidence.phase !== 'execute' ||
       !evidence.result?.ok ||
-      !PROJECT_TOOLS.has(evidence.call.function.name)
+      !evidenceTool(run, evidence.call.function.name)
     ) {
       throw new Error('Evidence must be a successful project tool call from the current task');
     }

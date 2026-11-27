@@ -1,0 +1,129 @@
+{
+  "initial": [
+    {
+      "name": "open-tasks",
+      "version": "1.0.0",
+      "hash": "91d4ae16062e44dadc8db83513dac92281f0d683acd0793cd470d034f59e3a1f",
+      "source": "study-market/v1"
+    },
+    {
+      "name": "handoff-note",
+      "version": "1.0.0",
+      "hash": "36a4e49ca4e5b0954aff5fc10678b62b8bd97e13927593f2923c212e5e7245ed",
+      "source": "study-market/v1"
+    }
+  ],
+  "candidate": {
+    "name": "open-tasks",
+    "oldHash": "91d4ae16062e44dadc8db83513dac92281f0d683acd0793cd470d034f59e3a1f",
+    "newHash": "1880095cc9e30f3f5fda4e92017ae78de4b4f86287495d66cce4a13a89262384"
+  },
+  "newSkills": [
+    "stale-items"
+  ],
+  "decision": {
+    "accept": false,
+    "reason": "missing-owner: регрессия действий. Правильный файл получен менее чем в половине попыток одной из версий.",
+    "report": "summary.json"
+  },
+  "afterDecision": [
+    {
+      "name": "open-tasks",
+      "version": "1.0.0",
+      "hash": "91d4ae16062e44dadc8db83513dac92281f0d683acd0793cd470d034f59e3a1f",
+      "source": "study-market/v1"
+    },
+    {
+      "name": "handoff-note",
+      "version": "1.0.0",
+      "hash": "36a4e49ca4e5b0954aff5fc10678b62b8bd97e13927593f2923c212e5e7245ed",
+      "source": "study-market/v1"
+    }
+  ],
+  "canRollback": false,
+  "afterRollback": null,
+  "events": [
+    {
+      "id": "a489eb6f-15fe-43c5-9178-f08f0299a8c1",
+      "run_id": null,
+      "session_id": null,
+      "source": "study-market/v1",
+      "time": "2026-11-27T15:27:38.476Z",
+      "type": "market_checked",
+      "detail": "Loaded catalog v1"
+    },
+    {
+      "id": "fc907306-e3c2-458d-88d7-6de295ca1a2d",
+      "run_id": null,
+      "session_id": null,
+      "source": "study-market/v1",
+      "time": "2026-11-27T15:27:38.476Z",
+      "type": "new_skill",
+      "detail": "Prepare a shift handover from tracker items including owners, blockers and next actions.",
+      "name": "handoff-note",
+      "newHash": "36a4e49ca4e5b0954aff5fc10678b62b8bd97e13927593f2923c212e5e7245ed",
+      "newVersion": "1.0.0"
+    },
+    {
+      "id": "81014b3f-79d7-4c61-b1ab-448b3de7903c",
+      "run_id": null,
+      "session_id": null,
+      "source": "study-market/v1",
+      "time": "2026-11-27T15:27:38.478Z",
+      "type": "installed",
+      "detail": "Available to subsequent runs",
+      "name": "handoff-note",
+      "newHash": "36a4e49ca4e5b0954aff5fc10678b62b8bd97e13927593f2923c212e5e7245ed",
+      "newVersion": "1.0.0"
+    },
+    {
+      "id": "d5488c58-59bf-4d3d-badd-58c1a00bcad0",
+      "run_id": null,
+      "session_id": null,
+      "source": "study-market/v2",
+      "time": "2026-11-27T15:27:38.481Z",
+      "type": "market_checked",
+      "detail": "Loaded catalog v2"
+    },
+    {
+      "id": "2f758619-e258-4383-bf85-e536e4ba2868",
+      "run_id": null,
+      "session_id": null,
+      "source": "study-market/v2",
+      "time": "2026-11-27T15:27:38.481Z",
+      "type": "new_skill",
+      "detail": "Find stale backlog items using a requested cutoff date and the recorded last update.",
+      "name": "stale-items",
+      "newHash": "6093562e6b1862fcc78ce26aa4170ce5fa96aa34b741673ec9d40969c8998d2c",
+      "newVersion": "1.0.0"
+    },
+    {
+      "id": "329c30de-cf65-4740-94f3-7712bf6aaf75",
+      "run_id": null,
+      "session_id": null,
+      "source": "study-market/v2",
+      "time": "2026-11-27T15:27:38.481Z",
+      "type": "candidate",
+      "detail": "Update ready for evaluation",
+      "name": "open-tasks",
+      "oldHash": "91d4ae16062e44dadc8db83513dac92281f0d683acd0793cd470d034f59e3a1f",
+      "newHash": "1880095cc9e30f3f5fda4e92017ae78de4b4f86287495d66cce4a13a89262384",
+      "oldVersion": "1.0.0",
+      "newVersion": "2.0.0"
+    },
+    {
+      "id": "92c2c299-7b7a-46a5-addc-1f97d7a0f1e7",
+      "run_id": null,
+      "session_id": null,
+      "source": "study-market/v2",
+      "time": "2026-11-27T15:35:13.744Z",
+      "type": "rejected",
+      "detail": "missing-owner: регрессия действий. Правильный файл получен менее чем в половине попыток одной из версий.",
+      "name": "open-tasks",
+      "oldHash": "91d4ae16062e44dadc8db83513dac92281f0d683acd0793cd470d034f59e3a1f",
+      "newHash": "1880095cc9e30f3f5fda4e92017ae78de4b4f86287495d66cce4a13a89262384",
+      "oldVersion": "1.0.0",
+      "newVersion": "2.0.0"
+    }
+  ]
+}

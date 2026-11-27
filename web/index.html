@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>Студия агента</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="/studio.css" />
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body>
+    <aside class="rail">
+      <a class="brand" href="#chat"
+        ><b class="brand-mark" aria-hidden="true">›_</b><span>Студия агента</span></a
+      >
+      <nav aria-label="Разделы">
+        <a data-page="chat" href="#chat"><i aria-hidden="true">▣</i>Диалог</a
+        ><a data-page="settings" href="#settings"><i aria-hidden="true">⊞</i>Расширения</a
+        ><a data-page="evals" href="#evals"><i aria-hidden="true">▥</i>Оценка качества</a>
+      </nav>
+      <div class="rail-heading">
+        <span>Сессии</span
+        ><button
+          id="new-session"
+          class="icon-button"
+          aria-label="Новый диалог"
+          title="Новый диалог"
+        >
+          ＋
+        </button>
+      </div>
+      <div id="sessions" class="sessions"></div>
+      <div class="connection" role="status">
+        <i id="light"></i><span id="connection">Подключение…</span>
+      </div>
+    </aside>
+    <main>
+      <header class="top">
+        <div class="crumb">
+          Рабочее пространство <span>/</span> <strong id="crumb">Диалог</strong>
+        </div>
+        <code>localhost</code>
+      </header>
+      <p id="issues" role="alert" hidden></p>
+      <section id="chat-page" class="view">
+        <div class="title-row">
+          <div>
+            <p class="eyebrow" id="session-id">НОВАЯ СЕССИЯ</p>
+            <h1 id="title">Диалог</h1>
+          </div>
+          <button id="inspect" class="outline" aria-expanded="true">Инспектор</button>
+        </div>
+        <div class="workarea">
+          <div class="conversation">
+            <div id="transcript" class="transcript"></div>
+            <form id="compose">
+              <label for="prompt" class="sr">Сообщение агенту</label
+              ><textarea
+                id="prompt"
+                required
+                maxlength="12000"
+                placeholder="Что поручить агенту?"
+                rows="2"
+              ></textarea>
+              <div class="composer-bar">
+                <span id="mode-hint"></span><button class="primary" id="send">Отправить ↗</button>
+              </div>
+            </form>
+          </div>
+          <aside id="inspector" class="inspector">
+            <div class="inspector-title">Инспектор сессии</div>
+            <div class="tabs" id="inspect-tabs">
+              <button data-inspect="events">События</button
+              ><button data-inspect="stats">Расход</button
+              ><button data-inspect="doctor">Доктор</button>
+            </div>
+            <div id="inspection"></div>
+          </aside>
+        </div>
+      </section>
+      <section id="settings-page" class="view" hidden>
+        <div class="title-row">
+          <div>
+            <h1>Расширения</h1>
+          </div>
+        </div>
+        <div class="tabs" id="settings-tabs">
+          <button data-section="skills">Скиллы</button><button data-section="mcp">MCP</button
+          ><button data-section="market">Маркет</button><button data-section="mode">Режим</button>
+        </div>
+        <div id="settings-panel"></div>
+      </section>
+      <section id="evals-page" class="view" hidden>
+        <div class="title-row">
+          <div>
+            <h1>Оценка качества</h1>
+          </div>
+        </div>
+        <div id="evaluations"></div>
+      </section>
+    </main>
+    <div id="notice" role="status" aria-live="polite" hidden></div>
+  </body>
+</html>

@@ -1,3 +1,5 @@
+import { executeExtension } from '../extensions/index.js';
+import { validateCall, taskTools } from './extension-tools.js';
 import type { Policy } from '../policy.js';
 import { assertTree, snapshot } from '../journal.js';
 import { executeTool } from '../tools.js';
@@ -45,15 +47,22 @@ export async function processPendingCall(context: RuntimeContext, run: RunState)
 
   try {
     policy = loadPolicy(context, run);
-    args = policy.validate(pending.call);
+    args = validateCall(run, policy, pending.call);
     if (
       pending.phase === 'plan' &&
-      !['list_files', 'read_file', 'submit_plan'].includes(pending.call.function.name)
+      ![
+        'list_files',
+        'read_file',
+        'submit_plan',
+        'load_skill',
+        'market_search',
+        run.routing?.mcp,
+      ].includes(pending.call.function.name)
     ) {
       throw new Error('Plan Mode allows only project reads and submit_plan; Bash is forbidden');
     }
 
-    if (pending.phase === 'execute' && PROJECT_TOOLS.has(pending.call.function.name)) {
+    if (pending.phase === 'execute' && taskTools(run).includes(pending.call.function.name)) {
       const task = run.tasks.find(
         (candidate) => candidate.id === pending.taskId && candidate.status === 'running',
       );
@@ -76,7 +85,8 @@ export async function processPendingCall(context: RuntimeContext, run: RunState)
 
   if (
     hasSideEffect &&
-    (run.mode === 'safe' || pending.call.function.name === 'delete_file') &&
+    (run.mode === 'safe' ||
+      ['delete_file', 'market_install'].includes(pending.call.function.name)) &&
     !record.approved
   ) {
     record.status = 'awaiting';
@@ -123,7 +133,10 @@ export async function processPendingCall(context: RuntimeContext, run: RunState)
     if (PROJECT_TOOLS.has(pending.call.function.name)) {
       result = await executeTool(pending.call, loadPolicy(context, run), capacity);
     } else {
-      result = executeAdministrativeCall(run, pending, args, policy);
+      if (run.extensions?.definitions.some((t) => t.function.name === pending.call.function.name)) {
+        validateCall(run, loadPolicy(context, run), pending.call);
+        result = await executeExtension(run.extensions, pending.call.function.name, args);
+      } else result = executeAdministrativeCall(run, pending, args, policy);
     }
   } catch (error) {
     if (error instanceof InjectedCrash) {

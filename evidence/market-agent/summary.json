@@ -1,0 +1,159 @@
+{
+  "generator": "harness-qwen3:4b-local",
+  "router": "Laya multilingual",
+  "approval": "Scripted demo operator allows only the requested install and two named output files.",
+  "trials": [
+    {
+      "run_id": "3d656ec6-0f08-4378-8d47-a0e88febca69",
+      "session_id": "c30235ec-7704-46a3-a3d4-f5c9d5b9aa65",
+      "status": "completed",
+      "prompt": "For my next shift handover I need a skill that reports owners, blockers and next actions. Find and install that skill from the local market. Write its installed name into receipt.txt.",
+      "route": {
+        "skill": null,
+        "marketSkill": "handoff-note",
+        "mcp": null,
+        "model": "multilingual",
+        "input": 284,
+        "output": 0,
+        "confidence": {
+          "skill": 0.5405,
+          "mcp": 0.2395
+        }
+      },
+      "events": "3d656ec6-0f08-4378-8d47-a0e88febca69.jsonl",
+      "skills_at_start": [
+        "open-tasks",
+        "owner-summary",
+        "release-notes"
+      ],
+      "output": "handoff-note",
+      "actions": [
+        {
+          "call_id": "laya_0_market_search",
+          "name": "market_search",
+          "ok": true,
+          "attempts": 1
+        },
+        {
+          "call_id": "yAjkRv8kGHP9uvzSlOZU0i7gpgAkIgtp",
+          "name": "market_install",
+          "ok": true,
+          "attempts": 1
+        },
+        {
+          "call_id": "HccTDTcAbQdSqCXReBpmKtKfFzF78hmT",
+          "name": "write_file",
+          "ok": true,
+          "attempts": 1
+        },
+        {
+          "call_id": "sNn6oXgAUO28u8f0BhyiOqrYsxgg0OJb",
+          "name": "complete_task",
+          "ok": true,
+          "attempts": 1
+        }
+      ]
+    },
+    {
+      "run_id": "278686f2-f4b6-4d16-9cc2-4f4050df506e",
+      "session_id": "c30235ec-7704-46a3-a3d4-f5c9d5b9aa65",
+      "status": "completed",
+      "prompt": "Prepare a shift handover note from the external tracker, with owners, blockers and next actions. Save it in handover.txt.",
+      "route": {
+        "skill": "handoff-note",
+        "marketSkill": null,
+        "mcp": "mcp_tracker_list",
+        "model": "multilingual",
+        "input": 260,
+        "output": 0,
+        "confidence": {
+          "skill": 0.9999,
+          "mcp": 0.0021
+        }
+      },
+      "events": "278686f2-f4b6-4d16-9cc2-4f4050df506e.jsonl",
+      "skills_at_start": [
+        "open-tasks",
+        "owner-summary",
+        "release-notes",
+        "handoff-note"
+      ],
+      "output": "Shift Handover Note\n\nOwners:\n- Mira (Tasks: T1, T2)\n- Lev (Task: T3)\n\nBlockers:\n- No blockers identified.\n\nNext Actions:\n- Complete Task T2\n- Follow up with Lev on Task T3\n\nDate: 2023-10-10",
+      "actions": [
+        {
+          "call_id": "laya_0_load_skill",
+          "name": "load_skill",
+          "ok": true,
+          "attempts": 1
+        },
+        {
+          "call_id": "laya_1_mcp_tracker_list",
+          "name": "mcp_tracker_list",
+          "ok": true,
+          "attempts": 1
+        },
+        {
+          "call_id": "CtXwgOMMamBc4q1k2UMx78VMnREy5A2h",
+          "name": "write_file",
+          "ok": true,
+          "attempts": 1
+        },
+        {
+          "call_id": "cfNhheM2t05fP72zOqThemgt5niqJTAu",
+          "name": "complete_task",
+          "ok": true,
+          "attempts": 1
+        }
+      ]
+    }
+  ],
+  "installed": [
+    {
+      "name": "open-tasks",
+      "version": "1.0.0",
+      "source": "study-market/v1",
+      "hash": "91d4ae16062e44dadc8db83513dac92281f0d683acd0793cd470d034f59e3a1f"
+    },
+    {
+      "name": "handoff-note",
+      "version": "1.0.0",
+      "source": "study-market/v1",
+      "hash": "36a4e49ca4e5b0954aff5fc10678b62b8bd97e13927593f2923c212e5e7245ed"
+    }
+  ],
+  "market_events": [
+    {
+      "id": "8b60f1c2-4dbc-4fac-97e4-d2072bdb6109",
+      "run_id": null,
+      "session_id": null,
+      "source": "study-market/v1",
+      "time": "2026-11-27T15:31:35.253Z",
+      "type": "market_checked",
+      "detail": "Loaded catalog v1"
+    },
+    {
+      "id": "f024124b-42f3-46e3-948e-9f8ceb9e022e",
+      "run_id": null,
+      "session_id": null,
+      "source": "study-market/v1",
+      "time": "2026-11-27T15:31:35.253Z",
+      "type": "new_skill",
+      "detail": "Prepare a shift handover from tracker items including owners, blockers and next actions.",
+      "name": "handoff-note",
+      "newHash": "36a4e49ca4e5b0954aff5fc10678b62b8bd97e13927593f2923c212e5e7245ed",
+      "newVersion": "1.0.0"
+    },
+    {
+      "id": "0d9a82f3-826a-4ed4-8fc7-4f119e0b88cc",
+      "run_id": null,
+      "session_id": null,
+      "source": "study-market/v1",
+      "time": "2026-11-27T15:31:52.705Z",
+      "type": "installed",
+      "detail": "Available to subsequent runs",
+      "name": "handoff-note",
+      "newHash": "36a4e49ca4e5b0954aff5fc10678b62b8bd97e13927593f2923c212e5e7245ed",
+      "newVersion": "1.0.0"
+    }
+  ]
+}

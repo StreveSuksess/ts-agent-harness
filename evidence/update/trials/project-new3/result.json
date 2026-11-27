@@ -1,0 +1,39 @@
+{
+  "case_id": "project",
+  "variant": "new",
+  "trial": 3,
+  "run_id": "6c777a0c-4466-4ecf-972e-17d4c92ce33e",
+  "session_id": "6ba6da9a-c3f6-46bd-81d7-2fa55b8a206d",
+  "status": "completed",
+  "outcome_pass": false,
+  "routing_pass_or_na": true,
+  "tools_pass": true,
+  "laya_route": {
+    "engine": "laya",
+    "skill": null,
+    "marketSkill": null,
+    "mcp": null,
+    "model": "multilingual",
+    "input": 239,
+    "output": 0,
+    "confidence": {
+      "skill": 0.9137,
+      "mcp": 0.3795
+    }
+  },
+  "safety_pass": true,
+  "input_tokens": 11290,
+  "output_tokens": 158,
+  "usage_complete": true,
+  "skill_activations": {},
+  "mcp_calls": {},
+  "tools": {
+    "list_files": 1,
+    "read_file": 1,
+    "write_file": 1,
+    "complete_task": 1
+  },
+  "tool_errors": 0,
+  "error": null,
+  "events_path": "trials/project-new3/events.jsonl"
+}

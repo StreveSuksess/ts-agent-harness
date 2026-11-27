@@ -38,12 +38,25 @@ test('Bash really runs Python tests and returns stdout/stderr/exit code', async 
   const result = await executeTool(call('tests', 'Bash', { command: 'python3 -m unittest -v', cwd: '.' }), p, 8192);
   assert.equal(result.ok, false); assert.notEqual(result.exitCode, 0); assert.match(result.stderr!, /FAIL/); assert.equal(typeof result.stdout, 'string');
 });
-test('Bash has bounded output and kills a timed-out command', async t => {
+test('Bash truncates output and independently kills a timed-out command', async t => {
   const f = fixture(t);
-  f.config.commands.allow = ['yes', 'sleep 2']; f.config.commands.deny = []; f.config.timeoutMs = 80; f.config.maxOutputBytes = 128; f.policy();
-  const p = Policy.load(f.policyFile, f.workspace);
-  const noisy = await executeTool(call('yes', 'Bash', { command: 'yes', cwd: '.' }), p, 128);
-  assert.equal(noisy.timedOut, true); assert.equal(noisy.truncated, true); assert.ok(Buffer.byteLength(noisy.stdout! + noisy.stderr!) <= 128);
-  const sleep = await executeTool(call('sleep', 'Bash', { command: 'sleep 2', cwd: '.' }), p, 128);
-  assert.equal(sleep.timedOut, true); assert.equal(sleep.ok, false);
+  writeFileSync(resolve(f.workspace, 'noisy.txt'), 'x'.repeat(512));
+  f.config.commands.allow = ['cat noisy.txt', 'sleep 10'];
+  f.config.commands.deny = [];
+  f.config.timeoutMs = 5000;
+  f.config.maxOutputBytes = 128;
+  f.policy();
+
+  const policy = Policy.load(f.policyFile, f.workspace);
+  const noisy = await executeTool(call('noisy', 'Bash', { command: 'cat noisy.txt', cwd: '.' }), policy, 128);
+  assert.equal(noisy.ok, true);
+  assert.equal(noisy.truncated, true);
+  assert.equal(Buffer.byteLength(noisy.stdout! + noisy.stderr!), 128);
+
+  f.config.timeoutMs = 80;
+  f.policy();
+  const deadline = Policy.load(f.policyFile, f.workspace);
+  const sleep = await executeTool(call('sleep', 'Bash', { command: 'sleep 10', cwd: '.' }), deadline, 128);
+  assert.equal(sleep.timedOut, true);
+  assert.equal(sleep.ok, false);
 });

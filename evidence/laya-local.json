@@ -1,0 +1,156 @@
+{
+  "captured_at": "2026-11-27T15:26:37.341596+00:00",
+  "source": "https://github.com/NandhaKishorM/laya",
+  "source_commit": "010bacef009c855ccba814b51f7c8e1d38ab5e3f",
+  "checkpoint": "convaiinnovations/laya/multilingual",
+  "checkpoint_sha256": "9d628fd971b700382ac6f65920a86f149777b2e748e0c955fb3b19695aa8f204",
+  "endpoint": "POST /v1/systemone",
+  "health": {
+    "status": "ok",
+    "loaded": [
+      "multilingual"
+    ],
+    "device": "cpu"
+  },
+  "omitted_response_field": "routing.repo is the host-local absolute checkpoint path",
+  "examples": [
+    {
+      "request": {
+        "model": "multilingual",
+        "state": {
+          "request": "Покажи открытые задачи из трекера. Сохрани их идентификаторы."
+        },
+        "questions": {
+          "skill": {
+            "type": "choice",
+            "instructions": "Select the relevant skill for the request or none.",
+            "criteria": {
+              "open-tasks": "List the IDs of open tasks in a tracker.",
+              "owner-summary": "Count tasks grouped by owner.",
+              "release-notes": "Write release notes.",
+              "none": "No relevant skill."
+            }
+          },
+          "source": {
+            "type": "choice",
+            "instructions": "Select the external tool needed or none.",
+            "criteria": {
+              "mcp_tracker_list": "Read the current tracker snapshot with task IDs, statuses and owners.",
+              "none": "Task uses only local files."
+            }
+          }
+        }
+      },
+      "response": {
+        "model": "laya-rl-agent",
+        "answers": {
+          "skill": {
+            "type": "choice",
+            "choice": "open-tasks",
+            "probabilities": {
+              "open-tasks": 0.9998,
+              "owner-summary": 0.0,
+              "release-notes": 0.0,
+              "none": 0.0002
+            },
+            "confidence": 0.9983,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "source": {
+            "type": "choice",
+            "choice": "none",
+            "probabilities": {
+              "mcp_tracker_list": 0.3777,
+              "none": 0.6223
+            },
+            "confidence": 0.0436,
+            "action": {
+              "act_probability": 1.0
+            }
+          }
+        },
+        "usage": {
+          "input_tokens": 148,
+          "output_tokens": 0
+        },
+        "routing": {
+          "model": "multilingual",
+          "reason": "explicit model='multilingual'",
+          "detection": null,
+          "workflow": null
+        }
+      }
+    },
+    {
+      "request": {
+        "model": "multilingual",
+        "state": {
+          "request": "Вызови инструмент внешнего учебного трекера и получи из него список задач. Верни идентификаторы открытых задач."
+        },
+        "questions": {
+          "skill": {
+            "type": "choice",
+            "instructions": "Select the relevant skill for the request or none.",
+            "criteria": {
+              "open-tasks": "List the IDs of open tasks in a tracker.",
+              "owner-summary": "Count tasks grouped by owner.",
+              "release-notes": "Write release notes.",
+              "none": "No relevant skill."
+            }
+          },
+          "source": {
+            "type": "choice",
+            "instructions": "Каким инструментом получить данные для этого запроса?",
+            "criteria": {
+              "mcp_tracker_list": "Получить задачи из внешнего учебного трекера через MCP.",
+              "none": "Источником данных служат только файлы на диске."
+            }
+          }
+        }
+      },
+      "response": {
+        "model": "laya-rl-agent",
+        "answers": {
+          "skill": {
+            "type": "choice",
+            "choice": "open-tasks",
+            "probabilities": {
+              "open-tasks": 0.637,
+              "owner-summary": 0.0058,
+              "release-notes": 0.017,
+              "none": 0.3403
+            },
+            "confidence": 0.4567,
+            "action": {
+              "act_probability": 1.0
+            }
+          },
+          "source": {
+            "type": "choice",
+            "choice": "mcp_tracker_list",
+            "probabilities": {
+              "mcp_tracker_list": 0.7249,
+              "none": 0.2751
+            },
+            "confidence": 0.1513,
+            "action": {
+              "act_probability": 1.0
+            }
+          }
+        },
+        "usage": {
+          "input_tokens": 175,
+          "output_tokens": 0
+        },
+        "routing": {
+          "model": "multilingual",
+          "reason": "explicit model='multilingual'",
+          "detection": null,
+          "workflow": null
+        }
+      }
+    }
+  ]
+}

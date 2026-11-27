@@ -33,6 +33,17 @@ function setRunExitCode(status: RunStatus | undefined): void {
 }
 
 export async function runCli(argv: string[]): Promise<void> {
+  if (argv[0] === 'ui') {
+    await import('../web/server.js');
+    return;
+  }
+  if (argv[0] === 'tracker' || (!argv.length && process.stdin.isTTY && process.stdout.isTTY)) {
+    if (!process.stdin.isTTY || !process.stdout.isTTY)
+      throw new Error('Для диалога нужен терминал. Для eval используйте npm run eval.');
+    const { studioChat } = await import('../studio/cli.js');
+    await studioChat(argv[1]);
+    return;
+  }
   const args = parseArguments(argv);
   const { command, flags } = args;
   const tty = Boolean(process.stdin.isTTY && process.stdout.isTTY);

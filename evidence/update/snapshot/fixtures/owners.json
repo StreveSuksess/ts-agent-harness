@@ -1,0 +1,7 @@
+[
+  {"id":"U1","owner":"Lena","status":"closed"},
+  {"id":"U2","owner":"Kai","status":"open"},
+  {"id":"U3","owner":"Lena","status":"open"},
+  {"id":"U4","owner":"Kai","status":"closed"},
+  {"id":"U5","owner":"Kai","status":"open"}
+]
