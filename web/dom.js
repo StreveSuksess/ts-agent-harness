@@ -15,6 +15,20 @@ export function el(tag, attrs = {}, ...children) {
 export const text = (tag, value, cls) => el(tag, { class: cls }, String(value ?? '—'));
 export const button = (label, click, cls = 'outline', disabled = false) =>
   el('button', { type: 'button', class: cls, disabled, 'on:click': click }, label);
+export function showTemporaryDialog(dialog) {
+  dialog.addEventListener(
+    'close',
+    async () => {
+      dialog.inert = true;
+      // Native close restores focus immediately. Keep the node for its top-layer exit.
+      await Promise.allSettled(dialog.getAnimations().map((motion) => motion.finished));
+      dialog.remove();
+    },
+    { once: true },
+  );
+  document.body.append(dialog);
+  dialog.showModal();
+}
 export const short = (value) => String(value || '').slice(0, 8);
 export const pretty = (value) =>
   typeof value === 'string' ? value : JSON.stringify(value, null, 2);

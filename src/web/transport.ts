@@ -26,7 +26,7 @@ const assets = new Map([
   ].map(
     (name) => ['/' + name + '.js', [name + '.js', 'application/javascript']] as [string, string[]],
   ),
-  ...['studio', 'thread', 'panels'].map((name) => [
+  ...['studio', 'thread', 'panels', 'motion'].map((name) => [
     '/' + name + '.css',
     [name + '.css', 'text/css'],
   ]),

@@ -1,0 +1,192 @@
+/* Native controls own focus and state. Motion follows their visible state. */
+@media (prefers-reduced-motion: no-preference) {
+  .nav-item,
+  .session-link,
+  .found-session,
+  .tabs button,
+  .mode-button,
+  .icon-button,
+  .top-button,
+  .send,
+  .prompt-example {
+    transition:
+      background-color var(--motion-quick) ease,
+      color var(--motion-quick) ease,
+      border-color var(--motion-quick) ease,
+      scale var(--motion-quick) var(--ease-out),
+      translate var(--motion-quick) var(--ease-out);
+  }
+
+  #compose {
+    transition:
+      box-shadow var(--motion-enter) ease,
+      border-color var(--motion-quick) ease;
+  }
+
+  .send .icon,
+  .prompt-example > .icon,
+  :is(.turn-activity, .turn-tasks, .thread-file) > summary > .icon:last-child {
+    transition: transform var(--motion-enter) var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .prompt-example:hover {
+      translate: 0 -2px;
+    }
+    .prompt-example:hover > .icon {
+      transform: translate(2px, -2px);
+    }
+    .send:enabled:hover .icon {
+      transform: translateY(-2px);
+    }
+  }
+  :where(button:enabled, .mode-button, a.nav-item):active {
+    scale: 0.975;
+  }
+
+  .fresh .welcome {
+    animation: studio-arrive 320ms var(--ease-out);
+  }
+  .fresh #compose {
+    animation: studio-arrive 320ms var(--ease-out) 40ms backwards;
+  }
+  .fresh .suggestions {
+    animation: studio-arrive 320ms var(--ease-out) 80ms backwards;
+  }
+  .detail-page:not([hidden]) > .detail-wrap,
+  .tab-content-enter,
+  #notice:not([hidden]) {
+    animation: studio-arrive var(--motion-enter) var(--ease-out);
+  }
+  @keyframes studio-arrive {
+    from {
+      opacity: 0.35;
+      translate: 0 7px;
+    }
+    to {
+      opacity: 1;
+      translate: 0;
+    }
+  }
+
+  /* Keep the sidebar at its reading width while its space in the grid closes. */
+  @media (min-width: 761px) {
+    body.navigation-ready {
+      transition: grid-template-columns var(--motion-enter) var(--ease-out);
+    }
+  }
+  .navigation-ready .rail {
+    transition:
+      transform var(--motion-enter) var(--ease-out),
+      opacity var(--motion-enter) ease,
+      visibility var(--motion-enter);
+  }
+  .rail-hidden .rail {
+    transform: translateX(calc(-100% - 8px));
+    opacity: 0;
+    pointer-events: none;
+  }
+  .backdrop {
+    opacity: 1;
+    transition:
+      opacity var(--motion-enter) ease,
+      display var(--motion-enter) allow-discrete;
+  }
+  .backdrop[hidden] {
+    opacity: 0;
+  }
+  @starting-style {
+    .backdrop:not([hidden]) {
+      opacity: 0;
+    }
+  }
+
+  .inspector {
+    transition:
+      translate var(--motion-enter) var(--ease-out),
+      opacity var(--motion-quick) ease,
+      display var(--motion-enter) allow-discrete;
+  }
+  .inspector[hidden] {
+    opacity: 0;
+    translate: 18px 0;
+    pointer-events: none;
+  }
+  @starting-style {
+    .inspector:not([hidden]) {
+      opacity: 0;
+      translate: 18px 0;
+    }
+  }
+
+  dialog {
+    opacity: 0;
+    translate: 0 10px;
+    scale: 0.985;
+    transition:
+      opacity var(--motion-quick) ease,
+      translate var(--motion-enter) var(--ease-out),
+      scale var(--motion-enter) var(--ease-out),
+      overlay var(--motion-enter) allow-discrete,
+      display var(--motion-enter) allow-discrete;
+  }
+  dialog[open] {
+    opacity: 1;
+    translate: 0;
+    scale: 1;
+  }
+  dialog::backdrop {
+    opacity: 0;
+    transition:
+      opacity var(--motion-enter) ease,
+      overlay var(--motion-enter) allow-discrete,
+      display var(--motion-enter) allow-discrete;
+  }
+  dialog[open]::backdrop {
+    opacity: 1;
+  }
+  @starting-style {
+    dialog[open] {
+      opacity: 0;
+      translate: 0 10px;
+      scale: 0.985;
+    }
+    dialog[open]::backdrop {
+      opacity: 0;
+    }
+  }
+
+  details::details-content {
+    opacity: 0;
+    transition:
+      opacity var(--motion-quick) ease,
+      content-visibility var(--motion-quick) allow-discrete;
+  }
+  details[open]::details-content {
+    opacity: 1;
+  }
+  @supports (interpolate-size: allow-keywords) {
+    details::details-content {
+      interpolate-size: allow-keywords;
+      block-size: 0;
+      overflow: clip;
+      transition:
+        block-size var(--motion-enter) var(--ease-out),
+        opacity var(--motion-quick) ease,
+        content-visibility var(--motion-enter) allow-discrete;
+    }
+    details[open]::details-content {
+      block-size: auto;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after,
+  dialog::backdrop {
+    scroll-behavior: auto !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}

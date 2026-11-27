@@ -87,8 +87,8 @@
     display: inline-block;
     background: var(--wash);
     color: var(--muted);
-    padding: 2px 7px;
-    border-radius: 5px;
+    padding: 2px 9px;
+    border-radius: 100vmax;
     font:
       500 11px/1.6 ui-monospace,
       Menlo,
@@ -106,10 +106,10 @@
   .outline,
   .primary,
   .archive-link {
-    min-height: 32px;
+    min-height: 34px;
     border: 1px solid var(--line);
-    border-radius: 7px;
-    padding: 6px 11px;
+    border-radius: var(--r-control);
+    padding: 6px 13px;
     color: var(--ink);
     background: var(--panel);
     font: inherit;
@@ -151,8 +151,8 @@
   }
   select {
     border: 1px solid var(--line);
-    border-radius: 7px;
-    padding: 7px 9px;
+    border-radius: var(--r-control);
+    padding: 7px 12px;
     background: var(--panel);
     max-width: 100%;
     color: var(--ink);
@@ -175,7 +175,7 @@
     white-space: pre-wrap;
     overflow-wrap: anywhere;
     padding: 12px 14px;
-    border-radius: 7px;
+    border-radius: var(--r-control);
     background: var(--wash);
     color: var(--ink);
     font:
@@ -185,6 +185,20 @@
   }
 }
 /* Extension directory and marketplace controls. */
+#settings-panel > .panel {
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  padding: 20px clamp(14px, 2vw, 24px);
+  margin: 18px 0;
+  background: var(--panel);
+}
+#settings-panel > .panel > h2 {
+  margin-bottom: 11px;
+}
+#settings-panel .row:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
 .catalog-item,
 .server-header {
   display: grid;
@@ -194,21 +208,27 @@
 }
 .catalog-item,
 .server-item {
-  padding: 18px 0;
-  border-top: 1px solid var(--line);
+  padding: 15px 0;
+}
+.catalog-item + .catalog-item,
+.server-item + .server-item {
+  border-top: 1px solid var(--fine);
+}
+.catalog-item:last-child,
+.server-item:last-child {
+  padding-bottom: 0;
 }
 .catalog-body {
   min-width: 0;
 }
 .catalog-glyph {
   width: 36px;
-  height: 38px;
+  height: 36px;
   display: grid;
   place-items: center;
-  border: 1px solid var(--line);
-  border-radius: 9px;
-  background: var(--panel);
-  color: var(--muted);
+  border-radius: var(--r-control);
+  background: var(--wash);
+  color: #756655;
 }
 .catalog-glyph svg {
   width: 18px;
@@ -241,8 +261,8 @@
   margin-top: 8px;
 }
 .switch {
-  width: 42px;
-  height: 28px;
+  width: 44px;
+  height: 34px;
   position: relative;
   display: grid;
   align-items: center;
@@ -257,21 +277,21 @@
 }
 .switch span {
   pointer-events: none;
-  width: 34px;
-  height: 20px;
+  width: 36px;
+  height: 22px;
   margin-inline: auto;
-  border-radius: 12px;
+  border-radius: 100vmax;
   background: #a4a09a;
 }
 .switch span::after {
   content: '';
   display: block;
   margin: 3px;
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background: #fff;
-  transition: transform 0.15s ease;
+  box-shadow: 0 1px 3px #342c211a;
 }
 .switch input:checked + span {
   background: var(--ink);
@@ -288,9 +308,9 @@
   display: flex;
   gap: 8px;
   align-items: center;
-  padding: 0 9px;
+  padding: 0 14px;
   border: 1px solid var(--line);
-  border-radius: 7px;
+  border-radius: var(--r-control);
   color: var(--muted);
   background: var(--panel);
 }
@@ -327,8 +347,8 @@
 }
 #evaluations .report {
   border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 18px 22px 4px;
+  border-radius: var(--r-card);
+  padding: 20px 22px 6px;
   margin: 14px 0;
   background: var(--panel);
 }
@@ -370,31 +390,48 @@
 .result-variant meter {
   display: block;
   width: 100%;
-  height: 5px;
+  height: 6px;
   margin: 7px 0 16px;
   appearance: none;
   border: 0;
-  border-radius: 5px;
+  border-radius: 100vmax;
+  overflow: hidden;
   background: var(--wash);
 }
 .result-variant meter::-webkit-meter-bar {
-  height: 5px;
+  height: 6px;
+  border-radius: inherit;
   background: var(--wash);
   border: 0;
 }
 .result-variant meter::-webkit-meter-optimum-value {
   background: var(--muted);
-  border-radius: 4px;
+  border-radius: 100vmax;
 }
 .result-variant:nth-child(2) meter::-webkit-meter-optimum-value {
   background: var(--accent);
 }
 .result-variant meter::-moz-meter-bar {
   background: var(--muted);
-  border-radius: 4px;
+  border-radius: 100vmax;
 }
 .result-variant:nth-child(2) meter::-moz-meter-bar {
   background: var(--accent);
+}
+/* This value lives on the persistent container. Polling can replace a report
+   without restarting its meter animation or changing its accessible value. */
+@property --meter-reveal {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 1;
+}
+@keyframes compare-results {
+  from {
+    --meter-reveal: 0;
+  }
+  to {
+    --meter-reveal: 1;
+  }
 }
 .gate-decision {
   display: flex;
@@ -417,6 +454,8 @@
   overflow-x: auto;
   max-height: 370px;
   margin-bottom: 12px;
+  border: 1px solid var(--fine);
+  border-radius: var(--r-control);
 }
 .table-scroll table {
   width: 100%;
@@ -459,7 +498,8 @@
   margin: auto;
   padding: 0;
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: var(--r-surface);
+  overflow: hidden;
   color: var(--ink);
   background: var(--panel);
   box-shadow: 0 14px 70px #29211930;
@@ -473,7 +513,7 @@
 }
 .modal-head {
   flex: none;
-  padding: 18px 22px;
+  padding: 20px 24px;
   border-bottom: 1px solid var(--line);
 }
 .modal-head code,
@@ -485,7 +525,7 @@
 .modal-scroll {
   overflow: auto;
   overscroll-behavior: contain;
-  padding: 18px 22px;
+  padding: 18px 24px;
   min-width: 0;
 }
 .modal-scroll .panel {
@@ -544,7 +584,8 @@
   }
   .catalog-glyph {
     width: 28px;
-    height: 32px;
+    height: 28px;
+    border-radius: var(--r-small);
   }
   .tool-directory {
     margin-left: 0;
@@ -556,9 +597,34 @@
   #settings-panel .row {
     flex-wrap: wrap;
   }
+  .switch {
+    height: 44px;
+  }
+  .catalog-item .switch {
+    margin-top: -4px;
+  }
 }
-@media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion: no-preference) {
+  #evals-page:not([hidden]) #evaluations {
+    animation: compare-results 360ms var(--ease-out);
+  }
+  .result-variant meter::-webkit-meter-optimum-value {
+    transform-origin: left;
+    transform: scaleX(var(--meter-reveal, 1));
+  }
+  .result-variant meter::-moz-meter-bar {
+    transform-origin: left;
+    transform: scaleX(var(--meter-reveal, 1));
+  }
+  .switch span {
+    transition: background-color var(--motion-quick) ease;
+  }
   .switch span::after {
-    transition: none;
+    transition:
+      transform var(--motion-enter) var(--ease-out),
+      scale var(--motion-quick) ease;
+  }
+  .switch input:active + span::after {
+    scale: 0.9;
   }
 }

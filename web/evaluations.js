@@ -1,5 +1,17 @@
 import { examplePicker } from './examples.js';
-import { el, text, button, details, group, chip, short, empty, number, when } from './dom.js';
+import {
+  el,
+  text,
+  button,
+  details,
+  group,
+  chip,
+  short,
+  empty,
+  number,
+  when,
+  showTemporaryDialog,
+} from './dom.js';
 
 const variant = { A: 'Без скиллов', B: 'Со скиллами', old: 'Прежняя версия', new: 'Кандидат' };
 const cases = {
@@ -256,7 +268,5 @@ export function openTrial(runId, events, doctor) {
       log,
     ),
   );
-  dialog.addEventListener('close', () => dialog.remove(), { once: true });
-  document.body.append(dialog);
-  dialog.showModal();
+  showTemporaryDialog(dialog);
 }

@@ -1,13 +1,16 @@
 import { mountIcons } from './icons.js';
 import { bindNavigation, fillExamples, historyLinks, modelName } from './workspace.js';
 import { transcript, inspection } from './chat.js';
-import { settingsPage } from './settings.js';
+import { keepSettingFocus, settingsPage } from './settings.js';
 import { evaluationsPage, openTrial } from './evaluations.js';
 
 const byId = (id) => document.getElementById(id);
 function setText(id, value) {
   const node = byId(id);
   if (node.textContent !== value) node.textContent = value;
+}
+function revealTab(id) {
+  for (const section of byId(id).children) section.classList.add('tab-content-enter');
 }
 let data = { sessions: [] },
   page = 'chat',
@@ -19,6 +22,7 @@ let data = { sessions: [] },
 let latestRequest = 0,
   connected = false,
   inspectorOpen = false,
+  submittedRunId,
   noticeTimer;
 const cache = new Map();
 const doctorReports = new Map();
@@ -27,6 +31,7 @@ function paint(id, key, render) {
   if (cache.get(id) === signature) return;
   cache.set(id, signature);
   const target = byId(id);
+  const restoreFocus = id === 'settings-panel' ? keepSettingFocus(target) : undefined;
   const opened = new Set(
     Array.from(target.querySelectorAll('details[open]')).map((d) => d.dataset.detail),
   );
@@ -48,6 +53,7 @@ function paint(id, key, render) {
     if (opened.has(d.dataset.detail)) d.open = true;
   for (const n of target.querySelectorAll('input[type=text]'))
     n.value = values.get(n.getAttribute('aria-label')) ?? '';
+  restoreFocus?.();
   target.scrollTop = id === 'transcript' && nearEnd ? target.scrollHeight : previousScroll;
 }
 function notify(message, error = false) {
@@ -70,11 +76,12 @@ async function refresh() {
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const state = await res.json();
     if (request !== latestRequest) return;
+    const previousSession = data.sessions?.find((s) => s.id === selected);
     data = state;
     connected = true;
     setText('connection', 'Подключено');
     byId('light').className = 'online';
-    render();
+    render(previousSession);
   } catch (error) {
     if (request !== latestRequest) return;
     connected = false;
@@ -147,7 +154,7 @@ function setSession(id) {
 function showEvents(kind, runId) {
   action('eval.events', { kind, runId }, ({ events, doctor }) => openTrial(runId, events, doctor));
 }
-function render() {
+function render(previousSession) {
   const session = (data.sessions ?? []).find((s) => s.id === selected);
   const ctx = {
     action,
@@ -206,7 +213,7 @@ function render() {
     const runs = session?.runs ?? [];
     const last = runs.at(-1);
     const waiting = pendingStatuses.has(last?.status);
-    const fresh = !runs.length;
+    const fresh = !runs.length && !(selected && !connected);
     byId('chat-page').classList.toggle('fresh', fresh);
     byId('greeting').hidden = !fresh;
     byId('suggestions').hidden = !fresh;
@@ -223,9 +230,11 @@ function render() {
     paint(
       'transcript',
       [selected, runs.map(({ events, ...turn }) => [turn, events?.at(-1)?.id])],
-      () => transcript(session, ctx),
+      () => transcript(session, ctx, previousSession?.runs, submittedRunId),
     );
+    if (submittedRunId && runs.some((run) => run.id === submittedRunId)) submittedRunId = undefined;
     byId('inspector').hidden = !inspectorOpen || fresh;
+    byId('inspector').inert = byId('inspector').hidden;
     byId('inspect').setAttribute('aria-expanded', String(inspectorOpen));
     byId('chat-page').classList.toggle('inspecting', inspectorOpen && !fresh);
     for (const b of document.querySelectorAll('[data-inspect]'))
@@ -257,6 +266,8 @@ function render() {
     );
 }
 function route() {
+  const previousPage = page,
+    previousTab = configTab;
   const [section, id] = location.hash.slice(1).split('/');
   page = ['chat', 'settings', 'evals'].includes(section) ? section : 'chat';
   if (page === 'settings' && ['skills', 'mcp', 'market', 'mode'].includes(id)) configTab = id;
@@ -277,6 +288,8 @@ function route() {
     }
   }
   render();
+  if (page === 'settings' && previousPage === page && configTab !== previousTab)
+    revealTab('settings-panel');
   if (page === 'chat') resizeComposer();
 }
 byId('new-session').onclick = () => {
@@ -304,9 +317,10 @@ document.addEventListener('keydown', (e) => {
     byId('inspect-close').click();
 });
 byId('inspect-tabs').onclick = (e) => {
-  if (e.target.dataset.inspect) {
+  if (e.target.dataset.inspect && e.target.dataset.inspect !== tab) {
     tab = e.target.dataset.inspect;
     render();
+    revealTab('inspection');
   }
 };
 byId('settings-tabs').onclick = (e) => {
@@ -332,7 +346,10 @@ byId('compose').onsubmit = (e) => {
         return;
       }
       if (byId('prompt').value === original) byId('prompt').value = '';
-      if (page === 'chat' && result.sessionId) setSession(result.sessionId);
+      if (page === 'chat' && result.sessionId) {
+        submittedRunId = result.runId;
+        setSession(result.sessionId);
+      }
     });
 };
 mountIcons();

@@ -1,4 +1,4 @@
-import { el, text, button, details, group, short } from './dom.js';
+import { el, text, button, details, group, short, showTemporaryDialog } from './dom.js';
 import { transcript } from './chat.js';
 
 function archiveContent(record) {
@@ -40,9 +40,7 @@ async function openExample(kind, label) {
     ),
     content,
   );
-  document.body.append(dialog);
-  dialog.addEventListener('close', () => dialog.remove(), { once: true });
-  dialog.showModal();
+  showTemporaryDialog(dialog);
   try {
     const response = await fetch('/api/examples/' + kind);
     if (!response.ok) throw new Error('Архив недоступен · HTTP ' + response.status);

@@ -130,6 +130,7 @@ export function bindNavigation({ sessions, openSession }) {
     sync();
   });
   sync();
+  document.body.classList.add('navigation-ready');
 
   const dialog = id('search-dialog'),
     field = id('search-input'),
@@ -174,10 +175,14 @@ export function bindNavigation({ sessions, openSession }) {
     if (dialog.open) return;
     field.value = '';
     populate();
+    dialog.inert = false;
     dialog.showModal();
     field.focus();
   }
   field.oninput = populate;
+  dialog.addEventListener('close', () => {
+    dialog.inert = !dialog.open;
+  });
   dialog.onkeydown = (e) => {
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
       const list = [field, ...results.querySelectorAll('button')];

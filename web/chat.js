@@ -203,7 +203,7 @@ function turn(run, ctx) {
     new Date(run.createdAt).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
   return el(
     'article',
-    { class: 'turn', 'aria-label': 'Запуск ' + short(run.id) },
+    { class: 'turn', 'data-status': run.status, 'aria-label': 'Запуск ' + short(run.id) },
     el(
       'div',
       { class: 'user-message' },
@@ -240,6 +240,38 @@ function turn(run, ctx) {
   );
 }
 
-export function transcript(session, ctx) {
-  return (session?.runs ?? []).map((run) => turn(run, ctx));
+export function transcript(session, ctx, previousRuns, submittedRunId) {
+  // Comparing live snapshots leaves the initial history and archived examples still.
+  const previous = new Map(previousRuns?.map((run) => [run.id, run]));
+  return (session?.runs ?? []).map((run) => {
+    const node = turn(run, ctx);
+    const before = previous.get(run.id);
+    const arrived = !before && (previousRuns !== undefined || run.id === submittedRunId);
+    if (arrived) {
+      showArrival(node.querySelector('.user-message'));
+      showArrival(node.querySelector('.agent-byline'));
+    }
+    if (arrived || before) {
+      if (run.final && !before?.final) showArrival(node.querySelector('.reply'));
+      if (run.status !== before?.status || run.pending?.id !== before?.pending?.id) {
+        for (const panel of node.querySelectorAll('.approval-box, .run-reason')) showArrival(panel);
+        if (!arrived) showArrival(node.querySelector('.run-state'));
+      }
+    }
+    return node;
+  });
+}
+
+function showArrival(part) {
+  if (!part || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  part.classList.add('thread-arrival');
+  // Browsers restart persistent CSS animations when a hidden page becomes visible again.
+  function settle(event) {
+    if (event.target !== part || event.pseudoElement) return;
+    part.classList.remove('thread-arrival');
+    part.removeEventListener('animationend', settle);
+    part.removeEventListener('animationcancel', settle);
+  }
+  part.addEventListener('animationend', settle);
+  part.addEventListener('animationcancel', settle);
 }

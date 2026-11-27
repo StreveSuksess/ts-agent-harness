@@ -1,6 +1,32 @@
 import { icon } from './icons.js';
 import { el, text, button, details, group, row, chip, short, pretty, when, empty } from './dom.js';
 
+// Polling can rebuild the panel just after a keyboard or pointer change.
+export function keepSettingFocus(panel) {
+  const control = document.activeElement;
+  if (!panel.contains(control) || !control.matches('[role="switch"],select')) return;
+  const label = control.getAttribute('aria-label');
+  const track = control.closest('.switch')?.querySelector('span');
+  const motions = (track?.getAnimations({ subtree: true }) ?? []).map(
+    ({ effect, currentTime }) => ({
+      frames: effect.getKeyframes(),
+      timing: { ...effect.getTiming(), pseudoElement: effect.pseudoElement },
+      time: currentTime,
+    }),
+  );
+  return () => {
+    const replacement = panel.querySelector(`[aria-label="${CSS.escape(label)}"]`);
+    if (!replacement) return;
+    replacement.focus({ preventScroll: true });
+    if (control.checked !== replacement.checked) return;
+    const newTrack = replacement.closest('.switch')?.querySelector('span');
+    for (const motion of motions) {
+      const animation = newTrack.animate(motion.frames, motion.timing);
+      animation.currentTime = motion.time;
+    }
+  };
+}
+
 function toggle(label, value, apply) {
   const input = el('input', {
     type: 'checkbox',

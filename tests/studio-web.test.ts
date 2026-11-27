@@ -48,6 +48,7 @@ test('web studio serves its UI, forwards state and commands, rejects foreign pag
     'workspace.js',
     'thread.css',
     'panels.css',
+    'motion.css',
     'inspection.js',
     'approval.js',
     'mark.svg',
